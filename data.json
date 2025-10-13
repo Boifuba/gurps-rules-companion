@@ -1,0 +1,262 @@
+{
+  "maneuvers": {
+    "basic": [
+      {
+        "name": "Do Nothing",
+        "attack": false,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "no",
+        "notes": "Take no action (Active Defenses at -4 if taking Do Nothing due to Stun; roll vs HT/IQ)"
+      },
+      {
+        "name": "Change Posture",
+        "attack": false,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "None",
+        "notes": "Standing, sitting, kneeling, crawling, prone, lying face up (see B364/MA98). Prone to standing takes two turns (Exception Acrobatic Stand)"
+      },
+      {
+        "name": "Move",
+        "attack": false,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "Full move",
+        "notes": "Do nothing but move (See Sprinting B354 and Acrobatic Movement MA105+)"
+      },
+      {
+        "name": "Concentrate",
+        "attack": false,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "None",
+        "notes": "Focus on mental task. Taking an active defense or being knocked down, injured, distracted etc. requires a Will-3 roll to maintain"
+      },
+      {
+        "name": "Evaluate",
+        "attack": false,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "Step",
+        "notes": "Study a foe prior to a melee attack (+1 per turn to subsequent attacks or feints, max. +3); may also use the Evaluate Bonus to cancel out penalties from Deceptive Attacks or feints"
+      },
+      {
+        "name": "Wait",
+        "attack": false,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "You may also perform a Step and Wait, loosing your Step in the proceeding Maneuver",
+        "notes": "Hold your action, then take an Attack, All-Out Attack, Committed Attack, Defensive Attack, Feint, Ready or Stop Hit. Specify exactly what your action will be and what will trigger it."
+      },
+      {
+        "name": "Ready",
+        "attack": false,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "You can move only a step.",
+        "notes": "Ready or reload a weapon, adjust reach (B269), change grip, change hands (MA102). "
+      }
+    ],
+    "meleeAttacks": [
+      {
+        "name": "Melee Attack",
+        "attack": true,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "You can move only a step.",
+        "notes": "Attack unarmed or with a ready weapon, you make take a step before or after you attack."
+      },
+      {
+        "name": "Move and Attack",
+        "attack": true,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "You can performa a fulll move. -2 to avoid falling.",
+        "notes": "Move and attack at a penalty (Ranged: -2 or weapon's bulk; non-slam Melee: -4, max. skill 9). For thrusting attacks, may use slam damage (HP x velocity/100). Not compatible with Flurry of Blows, Mighty Blow, Giant Step, Combos, Rapid Strike or Decepctive Attack (except Slams or cinematics techiniques wich require final effective skill of at least 10). If you attacked using an arm, you cannot use that arm to parry (if the attach involved a fist, elbon or weapon) or block (if you user a shield or cloak). If you used any other body part to attack, you cannot dodge. You can use any other defense but you cannot never retreat."
+      },
+      {
+        "name": "Defensive Attack",
+        "attack": true,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "You can move only a step.",
+        "notes": "Balanced weapon: +1 Parry/Block, Unbalanced weapon: +1 Parry/Block with different weapon or Parry with the same weapon, Kick: +2 to avoid Leg Grapple and DX rolls to avoid falling. -2 to damage (or -1 per die if worse), foe gets +1 to defend against a grab or grapple"
+      }
+    ],
+    "Committed Attack": [
+      {
+        "name": "Determined",
+        "attack": true,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "Step",
+        "notes": "+2 to hit, or take two steps at -2 to hit for a total modifier of 0. May move before or after an attack. The attacker cannot parry with the hand(s) he used to attack, block if he attacked with his shield or cloak, or dodge if he kicked. He can use any other defense, but at -2. He cannot retreat. "
+      },
+      {
+        "name": "Strong",
+        "attack": true,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "Step",
+        "notes": "+1 to damage (or +1 per two full damage dice), ST-based attacks only, may take 2 steps at -2 to skill, may move before or after an attack "
+      }
+    ],
+    "All-Out Attacks Melee": [
+      {
+        "name": "Determined",
+        "attack": true,
+        "defenses": { "dodge": false, "block": false, "parry": false },
+        "movement": "Half forward.",
+        "notes": "+4 to hit"
+      },
+      {
+        "name": "Double",
+        "attack": true,
+        "defenses": { "dodge": false, "block": false, "parry": false },
+        "movement": "Half forward.",
+        "notes": "2 attacks on same foe with ready weapon (-4 to off-hand without Ambidexterity)"
+      },
+      {
+        "name": "Feint",
+        "attack": true,
+        "defenses": { "dodge": false, "block": false, "parry": false },
+        "movement": "Half forward.",
+        "notes": "Make one feint and one attack on the same foe."
+      },
+      {
+        "name": "Long",
+        "attack": true,
+        "defenses": { "dodge": false, "block": false, "parry": false },
+        "movement": "Half forward.",
+        "notes": "Increase reach by 1 yard (Swing attacks at -2 dmg or -1 per die), may end in crouch (MA87)"
+      },
+      {
+        "name": "Strong",
+        "attack": true,
+        "defenses": { "dodge": false, "block": false, "parry": false },
+        "movement": "Half forward.",
+        "notes": "+2 to damage (or +1 per damage die)"
+      }
+    ],
+    "rangedAttacks": [
+      {
+        "name": "Aim",
+        "attack": true,
+        "defenses": { "dodge": true, "block": true, "parry": true },
+        "movement": "You can move only a step. You get no step if your two-handed weapon is braced",
+        "notes": "Taking an active defense spoils your Aim; if you are injured, make a Will roll or lose your Aim. Aim a ranged weapon to get its Acc bonus (+1 for bracing, +1 for 2 turns, +2 for 3+ turns, the combined bonus from all targeting systems cannot exceed the weapons base Accuracy)."
+      }
+    ],
+    "All-Out Attacks Ranged": [
+      {
+        "name": "All-Out Determined",
+        "attack": true,
+        "defenses": { "dodge": false, "block": false, "parry": false },
+        "movement": "Half forward.",
+        "notes": "+1 to hit"
+      },
+      {
+        "name": "All-Out Suppression Fire",
+        "attack": true,
+        "defenses": { "dodge": false, "block": false, "parry": false },
+        "movement": "Half forward.",
+        "notes": "RoF 5+ targets 2 yard zone - RoF 10+ suppress multiple, adjacent 2 yard zones with 5+ Shots/zone"
+      }
+    ]
+  },
+  "activeDefenses": [
+    {
+      "name": "All-Out Defense Increased",
+      "attack": false,
+      "defenses": { "dodge": true, "block": true, "parry": true },
+      "movement": "Step",
+      "notes": "Two different Defenses against one attack"
+    },
+    {
+      "name": "All-Out Defense Mental",
+      "attack": false,
+      "defenses": { "dodge": true, "block": true, "parry": true },
+      "movement": "Step",
+      "notes": "+2 to all resistance rolls against magic, psi, and anything similar. This bonus persists until your next turn"
+    },
+    {
+      "name": "Dodge and Drop / Dive Scrificial",
+      "attack": false,
+      "defenses": { "dodge": true, "block": false, "parry": false },
+      "movement": "none",
+      "notes": "+3 to Dodge - may take a step before drop, ranged attacks only If you make your dodge roll, you get hit - if you fail, original victim gets his defense roll"
+    },
+    {
+      "name": "Dodge Acrobatics",
+      "attack": false,
+      "defenses": { "dodge": true, "block": false, "parry": false },
+      "movement": "none",
+      "notes": "-2/+2 to Dodge - once per turn, can be combined with retreat"
+    }
+  ],
+  "extraEffort": [
+    {
+      "name": "Flurry of Blows",
+      "notes": "Spend 1 FP per attack to halve the penalty for Rapid Strike to -3 (B370, usually -6, if you spend 1 FP you half it to -3)",
+      "special": true
+    },
+    {
+      "name": "Giant Step",
+      "notes": "Spend 1 FP for one extra step (before or after your attack) during an Attack or Defensive Attack.",
+      "special": true
+     },
+    {
+      "name": "Great Lunge",
+      "notes": "Spend 1 FP to get the effects of All-Out Attack (Long) without losing defenses (incompatible with All-Out Attack, Defensive Attack, Defensive Grip).",
+      "special": true
+    },
+    {
+      "name": "Heroic Charge",
+      "notes": "Spend 1 FP during a Move and Attack to ignore the skill penalty and cap (except for Acrobatic Attack or Flying Attack).",
+      "special": true
+    },
+    {
+      "name": "Mighty Blow",
+      "notes": "Spend 1 FP per attack to get the All-Out Attack (Strong) damage bonus to an Attack without losing defenses.",
+      "special": true
+      },
+    {
+      "name": "Feverish Defense",
+      "notes": "Spend 1 FP to add +2 to a single active defense roll (except when using All-Out Attack or Committed Attack)",
+      "special": true
+        },
+    {
+      "name": "Rapid Recovery",
+      "notes": "Spend 1 FP to Parry with an unbalanced weapon during an Attack, or any weapon during a Move and Attack",
+      "special": true
+    }
+  ],
+  "Melee Options": [
+    {
+      "name": "Deceptive Attack",
+      "notes": "Target suffers a -1 to active defense for every -2 taken to melee skill (min. skill of 10), or -1 to Dodge for every -2 taken to ranged skill (min. skill of 10).",
+      "special": true
+    },
+    {
+      "name": "Rapid Strike",
+      "notes": "Take a penalty to yout Parry (min. 8), not including modifiers. If Parry succeeds and yor attacks using the parrying weapon next turn, apply the same penalty to your foes Parry (hand or weapon), Block(shield) or Dodge (no-hand unarmed strike) or half that penalty to all other defenses.",
+      "special": true
+    },
+    {
+      "name": "Riposte",
+      "notes": "Make two attacks, both at -6, to replace one normal attack. Can target seperate foes. Ranged Rapid Strikes if RoF 2+. Half penalty for Weaponmaster or Gunslinger",
+      "special": true
+    },
+    {
+      "name": "Stop Hit",
+      "notes": "+4 to hit, +2 to defend against. Not compatible with Deceptive Attack, Evaluate, Riposte or Feint. Does not affect critical chance.",
+      "special": true
+    },
+    {
+      "name": "Telegraphic Attack",
+      "notes": "Take a Wait Maneuver and declare that you intend to attack. Both roll to hit. Both fail, nothing happens. If one hits, the other defends at -1 or -3 if Parry with same weapon. If both hit, larger margin of success defends normally, other at penalty above. If tied, both have above penalty. Possible with Unbalaced/Unready Weapon.",
+      "special": true
+    },
+    {
+      "name": "Tip Slash",
+      "notes": "Swing a thrusting, impaling weapon to do cutting damage equal to the weapons impaling damage -2",
+      "special": true
+    }
+  ],
+  "Ranged Options": [
+    {
+      "name": "Pop-Up Attack",
+      "notes": "Ranged attacks only, attacker suffers -2 to hit, no aim possible, may step. Not possible with bow or sling",
+      "special": true
+    }
+  ]
+}

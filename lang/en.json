@@ -1,0 +1,11 @@
+{
+  "ACTIONS_MANAGER": {
+    "Title": "GURPS for Dummies",
+    "SendToChat": "Send to Chat",
+    "Attack": "Attack",
+    "Defense": "Defense",
+    "Movement": "Movement",
+    "Notes": "Notes",
+    "Adjustment": "Adjustment"
+  }
+}

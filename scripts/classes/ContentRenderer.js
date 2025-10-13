@@ -1,0 +1,154 @@
+import { ICON_URLS } from '../constants.js';
+
+/**
+ * ContentRenderer - Handles rendering of action content details
+ */
+export class ContentRenderer {
+  constructor() {
+    this.currentAction = null;
+  }
+
+  /**
+   * Set the current action to display
+   * @param {Object} action - The action object to render
+   */
+  setAction(action) {
+    this.currentAction = action;
+  }
+
+  /**
+   * Get the current action
+   * @returns {Object|null} The current action
+   */
+  getAction() {
+    return this.currentAction;
+  }
+
+  /**
+   * Clear the current action
+   */
+  clear() {
+    this.currentAction = null;
+  }
+
+  /**
+   * Create icon HTML with active/inactive state
+   * @param {string} iconType - The type of icon (attack, dodge, block, parry, movement)
+   * @param {boolean} isActive - Whether the icon is active
+   * @returns {string} HTML for the icon
+   */
+  createIcon(iconType, isActive) {
+    const iconUrl = ICON_URLS[iconType];
+    const activeClass = isActive ? 'am-icon-active' : 'am-icon-inactive';
+    return `<img src="${iconUrl}" alt="${iconType}" class="am-icon ${activeClass}" />`;
+  }
+
+  /**
+   * Create defenses icons HTML
+   * @param {Object} defenses - The defenses object
+   * @returns {string} HTML for defense icons
+   */
+  createDefensesIcons(defenses) {
+    if (!defenses) {
+      return `
+        ${this.createIcon('dodge', false)}
+        ${this.createIcon('block', false)}
+        ${this.createIcon('parry', false)}
+      `;
+    }
+    return `
+      ${this.createIcon('dodge', defenses.dodge === true)}
+      ${this.createIcon('block', defenses.block === true)}
+      ${this.createIcon('parry', defenses.parry === true)}
+    `;
+  }
+
+  /**
+   * Check if action is special
+   * @param {Object} action - The action object
+   * @returns {boolean} True if special
+   */
+  isSpecialAction(action) {
+    return action.special === true;
+  }
+
+
+  /**
+   * Generate HTML for special action
+   * @param {Object} action - The action object
+   * @returns {string} HTML string
+   */
+  renderSpecialHTML(action) {
+    return `
+      <div id="am-content-display" class="am-special-content">
+        <div id="am-content-body">
+          ${action.notes ? `
+          <div id="am-content-field-notes">
+            <span id="am-content-label">Description:</span>
+            <p id="am-content-notes">${action.notes}</p>
+          </div>
+          ` : ''}
+        </div>
+        <div id="am-content-footer">
+          <button id="am-send-chat-btn" type="button">
+            <i class="fas fa-comment"></i> Send to Chat
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Generate HTML for normal action
+   * @param {Object} action - The action object
+   * @returns {string} HTML string
+   */
+  renderNormalHTML(action) {
+    return `
+      <div id="am-content-display">
+        <div id="am-content-body">
+          <div id="am-icons-row">
+            ${this.createIcon('attack', action.attack === true)}
+            ${this.createDefensesIcons(action.defenses)}
+            ${this.createIcon('movement', action.movement && action.movement !== 'none')}
+          </div>
+          ${action.movement && action.movement !== 'none' && action.movement !== 'no' ? `
+          <div id="am-content-field">
+            <span id="am-content-label">Movement:</span>
+            <span id="am-content-value">${action.movement}</span>
+          </div>
+          ` : ''}
+          ${action.notes ? `
+          <div id="am-content-field-notes">
+            <span id="am-content-label">Description:</span>
+            <p id="am-content-notes">${action.notes}</p>
+          </div>
+          ` : ''}
+        </div>
+        <div id="am-content-footer">
+          <button id="am-send-chat-btn" type="button">
+            <i class="fas fa-comment"></i> Send to Chat
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Generate HTML for the action content
+   * @returns {string} HTML string
+   */
+  renderHTML() {
+    if (!this.currentAction) {
+      return '<div id="am-content-empty">Select an action to view details</div>';
+    }
+
+    const action = this.currentAction;
+
+    if (this.isSpecialAction(action)) {
+      return this.renderSpecialHTML(action);
+    } else {
+      return this.renderNormalHTML(action);
+    }
+  }
+}

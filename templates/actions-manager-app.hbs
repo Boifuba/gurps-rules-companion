@@ -1,0 +1,70 @@
+<div id="am-container">
+  <aside id="am-column-1" class="am-column">
+    <div class="am-column-header">Categories</div>
+    <div class="am-button-list">
+      {{#each column1Categories}}
+      <button
+        class="am-category-button {{#if this.isSelected}}am-category-selected{{/if}}"
+        data-column1-button="{{this.id}}"
+        type="button">
+        {{this.name}}
+      </button>
+      {{/each}}
+    </div>
+  </aside>
+
+  <aside id="am-column-2" class="am-column">
+    <div class="am-column-header">{{column2Title}}</div>
+    <div class="am-accordion">
+      {{#if column2Items}}
+        {{#each column2Items}}
+        <div class="am-accordion-section">
+          <button
+            class="am-accordion-header {{#if this.isExpanded}}am-accordion-expanded{{/if}}"
+            data-column2-header="{{this.id}}"
+            type="button">
+            <span class="am-accordion-title">{{this.name}}</span>
+            <i class="am-accordion-icon fas {{#if this.isExpanded}}fa-chevron-down{{else}}fa-chevron-right{{/if}}"></i>
+          </button>
+          {{#if this.isExpanded}}
+          <div class="am-accordion-content">
+            {{#if this.actions}}
+              {{#each this.actions}}
+              <button
+                class="am-action-button {{#if this.isSelected}}am-action-selected{{/if}}"
+                data-action-id="{{this.id}}"
+                type="button">
+                {{this.name}}
+              </button>
+              {{/each}}
+            {{else}}
+              <div class="am-no-actions">No actions available</div>
+            {{/if}}
+          </div>
+          {{/if}}
+        </div>
+        {{/each}}
+      {{else}}
+        {{#if column2DirectActions}}
+          {{#each column2DirectActions}}
+          <button
+            class="am-action-button {{#if this.isSelected}}am-action-selected{{/if}}"
+            data-direct-action-id="{{this.id}}"
+            type="button">
+            {{this.name}}
+          </button>
+          {{/each}}
+        {{else}}
+          <div class="am-column-empty">Select a category</div>
+        {{/if}}
+      {{/if}}
+    </div>
+  </aside>
+
+  <main id="am-column-3" class="am-column">
+    <div class="am-column-header">{{column3Title}}</div>
+    <section id="am-content-panel">
+      {{{contentHTML}}}
+    </section>
+  </main>
+</div>
