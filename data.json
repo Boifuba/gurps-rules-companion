@@ -169,18 +169,33 @@
       "notes": "+2 to all resistance rolls against magic, psi, and anything similar. This bonus persists until your next turn"
     },
     {
-      "name": "Dodge and Drop / Dive Scrificial",
+      "name": "Dodge",
       "attack": false,
       "defenses": { "dodge": true, "block": false, "parry": false },
       "movement": "none",
-      "notes": "+3 to Dodge - may take a step before drop, ranged attacks only If you make your dodge roll, you get hit - if you fail, original victim gets his defense roll"
+      "notes": "<b>Dodge and Drop / Dive Scrificial</b>: +3 to Dodge - may take a step before drop, ranged attacks only If you make your dodge roll, you get hit - if you fail, original victim gets his defense roll.<br><br><b>Dodge Acrobatics</b>: 2/+2 to Dodge - once per turn, can be combined with retreat."
     },
+ 
     {
-      "name": "Dodge Acrobatics",
+      "name": "Parry - Weapon",
       "attack": false,
-      "defenses": { "dodge": true, "block": false, "parry": false },
+      "defenses": { "dodge": false, "block": false, "parry": true },
       "movement": "none",
-      "notes": "-2/+2 to Dodge - once per turn, can be combined with retreat"
+      "notes": "<b>Flail</b>: -4, fencing weapons can’t parry at all<br><br><b>Thrown</b>: -1 if (Large, eg. spear), -2 if (Small, eg. knife)<br><br><b>Consecutive</b>: -4 if you use the same hand in the same round. -2 if you use fencing or with Weapon Master/Trained by a Master. -1 if you use fencing with Weapon Master/Trained by a Master<br><br><b>Cross</b>: Commit two ready melee weapons to a single Parry, using the better Parry score +2 and combining their weights (for purposes of breaking). Neither hand can Parry again this turn<br><br><b>Supported</b>: Use a ready (empty) hand to support a parrying weapon for +1 as if it were a two-handed weapon. Neither hand can parry again"
+        },
+    {
+      "name": "Parry - Unarmed",
+      "attack": false,
+      "defenses": { "dodge": false, "block": false, "parry": true },
+      "movement": "none",
+      "notes": "<b>DX / Karate / Brawling</b>: Use highest to Parry with one free hand<br><br><b>Wrestling / Sumo</b>: Need to use two hands to Parry<br><br><b>Weapon Swing Attack</b>: -3, 0 if you use Karate or Judo <br><br><b>With Legs</b>: Needs Karate / Brawling - can only parry attacks below the waist, can not retreat, once per Turn"
+    },
+     {
+      "name": "Block",
+      "attack": false,
+      "defenses": { "dodge": false, "block": true, "parry": false },
+      "movement": "none",
+      "notes": "<b>Consecutive</b>: -5<br><br><b>Flail</b>:-2<br><br><b>Close Combat</b>: Not possible.<br><br>You can not Block Bullets or Beam Weapons"
     }
   ],
   "extraEffort": [
