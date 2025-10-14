@@ -23,11 +23,11 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
   }
 
   static DEFAULT_OPTIONS = {
-    id: "actions-manager-app",
-    classes: ["actions-manager"],
+    id: "gurps-rules-companion-app",
+    classes: ["gurps-rules-companion"],
     tag: "div",
     window: {
-      title: "ACTIONS_MANAGER.Title",
+      title: "GURPS_RULES_COMPANION.Title",
       icon: "fas fa-list-check",
       minimizable: true,
       resizable: true
@@ -184,7 +184,7 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
 
   handleSendToChat() {
     if (!this.currentSelectedButton) {
-      ui.notifications.warn('Please select an action first');
+      ui.notifications.warn(game.i18n.localize('GURPS_RULES_COMPANION.notifications.selectActionFirst'));
       return;
     }
 

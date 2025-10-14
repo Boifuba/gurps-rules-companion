@@ -73,12 +73,12 @@ export class ChatHandler {
     const notesContent = this.buildNotesForChat(action);
 
     return `
-      <div class="am-chat-message">
-        <h3 class="am-chat-title">${action.name}</h3>
-        <div class="am-chat-category"><strong>Category:</strong> ${this.formatCategoryName(category)}</div>
-        <div class="am-chat-field"><strong>Attack:</strong> ${action.attack ? 'Yes' : 'No'}</div>
-        <div class="am-chat-field"><strong>Defenses:</strong> ${defenses}</div>
-        ${notesContent ? `<div class="am-chat-notes"><strong>Notes:</strong> ${notesContent}</div>` : ''}
+      <div class="grc-chat-message">
+        <h3 class="grc-chat-title">${action.name}</h3>
+        <div class="grc-chat-category"><strong>Category:</strong> ${this.formatCategoryName(category)}</div>
+        <div class="grc-chat-field"><strong>Attack:</strong> ${action.attack ? 'Yes' : 'No'}</div>
+        <div class="grc-chat-field"><strong>Defenses:</strong> ${defenses}</div>
+        ${notesContent ? `<div class="grc-chat-notes"><strong>Notes:</strong> ${notesContent}</div>` : ''}
       </div>
     `;
   }

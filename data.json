@@ -189,13 +189,22 @@
       "defenses": { "dodge": false, "block": false, "parry": true },
       "movement": "none",
       "notes": "<b>DX / Karate / Brawling</b>: Use highest to Parry with one free hand<br><br><b>Wrestling / Sumo</b>: Need to use two hands to Parry<br><br><b>Weapon Swing Attack</b>: -3, 0 if you use Karate or Judo <br><br><b>With Legs</b>: Needs Karate / Brawling - can only parry attacks below the waist, can not retreat, once per Turn"
+
     },
      {
       "name": "Block",
       "attack": false,
       "defenses": { "dodge": false, "block": true, "parry": false },
       "movement": "none",
-      "notes": "<b>Consecutive</b>: -5<br><br><b>Flail</b>:-2<br><br><b>Close Combat</b>: Not possible.<br><br>You can not Block Bullets or Beam Weapons"
+      "notes": "<b>Consecutive</b>: -5<br><br><b>Flail</b>:-2<br><br><b>Block</b>: +1.<br><br>You can not Block Bullets or Beam Weapons"
+     },
+     {
+      "name": "Retreat",
+      "attack": false,
+      "defenses": { "dodge": false, "block": false, "parry": false },
+      "movement": "none",
+      "notes": "<b>Dodge</b>: +3<br><br><b>Parry</b>: +1, +3 if using Fencing Weapon / Judo / Karate<br><br><b>Close Combat</b>: Not possible.<br><br>You can not Block Bullets or Beam Weapons",
+      "special": true
     }
   ],
   "extraEffort": [
@@ -272,6 +281,12 @@
       "name": "Pop-Up Attack",
       "notes": "Ranged attacks only, attacker suffers -2 to hit, no aim possible, may step. Not possible with bow or sling",
       "special": true
+    },
+    {
+      "name": "Spraying Fire",
+       "notes": "RoF 5+ weapon may attack multiple targets, must be within 30° angle, engaged in succession, +1 Rcl 2nd target +2 Rcl 3rd target and so on. RoF -16 looses 1 shot/yard, RoF 16+ looses 2 shot/yard. Attack roll for each target with effective RoF",
+      "special": true
     }
+    
   ]
 }

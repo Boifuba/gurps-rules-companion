@@ -1,4 +1,48 @@
 import { ActionsManagerApp } from './classes/ActionsManagerApp.js';
+import { MODULE_ID } from './constants.js';
+
+/**
+ * Register all module settings in the game settings menu
+ */
+function registerModuleSettings() {
+  // game.settings.register(MODULE_ID, 'moduleEnabled', {
+  //   name: 'Enable GURPS Rules Companion',
+  //   hint: 'Toggle the module on or off',
+  //   scope: 'world',
+  //   config: true,
+  //   type: Boolean,
+  //   default: true,
+  //   restricted: true,
+  //   requiresReload: true
+  // });
+
+  game.settings.register(MODULE_ID, 'showSceneButton', {
+    name: game.i18n.localize('GURPS_RULES_COMPANION.settings.showSceneButton.name'),
+    hint: game.i18n.localize('GURPS_RULES_COMPANION.settings.showSceneButton.hint'),
+    scope: 'world',
+    config: true,
+    type: Boolean,
+    default: true,
+    restricted: true,
+    requiresReload: true
+  });
+}
+
+/**
+ * Enable the module
+ */
+function enableModule() {
+  game.settings.set(MODULE_ID, 'moduleEnabled', true);
+  ui.notifications.info(game.i18n.localize('GURPS_RULES_COMPANION.notifications.moduleEnabled'));
+}
+
+/**
+ * Disable the module
+ */
+function disableModule() {
+  game.settings.set(MODULE_ID, 'moduleEnabled', false);
+  ui.notifications.info(game.i18n.localize('GURPS_RULES_COMPANION.notifications.moduleDisabled'));
+}
 
 /**
  * Main module initialization
@@ -6,7 +50,9 @@ import { ActionsManagerApp } from './classes/ActionsManagerApp.js';
 Hooks.once('init', () => {
   console.log('GURPS Rules Companion | Initializing module');
 
-  game.actionsManager = {
+  registerModuleSettings();
+
+  game.gurpsRulesCompanion = {
     ActionsManagerApp
   };
 });
@@ -17,28 +63,28 @@ Hooks.once('init', () => {
 Hooks.once('ready', () => {
   console.log('GURPS Rules Companion | Module ready');
 
-  game.actionsManager.open = () => {
+  game.gurpsRulesCompanion.open = () => {
     ActionsManagerApp.show();
   };
 
-  ui.notifications.info('GURPS Rules Companion loaded. Use game.actionsManager.open() to open the interface.');
+  ui.notifications.info(game.i18n.localize('GURPS_RULES_COMPANION.notifications.moduleLoaded'));
 });
 
 /**
- * Add button to scene controls (optional)
+ * Add button to scene controls (only visible to GMs)
  */
 Hooks.on('getSceneControlButtons', (controls) => {
-  if (!game.user.isGM) return;
+  const tokenControls = controls.tokens;
 
-  const tokenControls = controls.find(c => c.name === 'token');
-  if (tokenControls) {
-    tokenControls.tools.push({
-      name: 'actions-manager',
+  if (tokenControls && tokenControls.tools) {
+    tokenControls.tools['gurps-rules-companion'] = {
+      name: 'gurps-rules-companion',
       title: 'GURPS Rules Companion',
-      icon: 'fas fa-list-check',
+      icon: 'fa-solid fa-scale-balanced',
       button: true,
-      onClick: () => ActionsManagerApp.show()
-    });
+      onClick: () => ActionsManagerApp.show(),
+      visible: game.user.isGM && game.settings.get(MODULE_ID, 'showSceneButton')
+    };
   }
 });
 

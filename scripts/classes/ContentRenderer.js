@@ -39,8 +39,8 @@ export class ContentRenderer {
    */
   createIcon(iconType, isActive) {
     const iconUrl = ICON_URLS[iconType];
-    const activeClass = isActive ? 'am-icon-active' : 'am-icon-inactive';
-    return `<img src="${iconUrl}" alt="${iconType}" class="am-icon ${activeClass}" />`;
+    const activeClass = isActive ? 'grc-icon-active' : 'grc-icon-inactive';
+    return `<img src="${iconUrl}" alt="${iconType}" class="grc-icon ${activeClass}" />`;
   }
 
   /**
@@ -80,17 +80,17 @@ export class ContentRenderer {
    */
   renderSpecialHTML(action) {
     return `
-      <div id="am-content-display" class="am-special-content">
-        <div id="am-content-body">
+      <div id="grc-content-display" class="grc-special-content">
+        <div id="grc-content-body">
           ${action.notes ? `
-          <div id="am-content-field-notes">
-            <span id="am-content-label">Description:</span>
-            <p id="am-content-notes">${action.notes}</p>
+          <div id="grc-content-field-notes">
+            <span id="grc-content-label">Description:</span>
+            <p id="grc-content-notes">${action.notes}</p>
           </div>
           ` : ''}
         </div>
-        <div id="am-content-footer">
-          <button id="am-send-chat-btn" type="button">
+        <div id="grc-content-footer">
+          <button id="grc-send-chat-btn" type="button">
             <i class="fas fa-comment"></i> Send to Chat
           </button>
         </div>
@@ -105,28 +105,28 @@ export class ContentRenderer {
    */
   renderNormalHTML(action) {
     return `
-      <div id="am-content-display">
-        <div id="am-content-body">
-          <div id="am-icons-row">
+      <div id="grc-content-display">
+        <div id="grc-content-body">
+          <div id="grc-icons-row">
             ${this.createIcon('attack', action.attack === true)}
             ${this.createDefensesIcons(action.defenses)}
             ${this.createIcon('movement', action.movement && action.movement !== 'none')}
           </div>
           ${action.movement && action.movement !== 'none' && action.movement !== 'no' ? `
-          <div id="am-content-field">
-            <span id="am-content-label">Movement:</span>
-            <span id="am-content-value">${action.movement}</span>
+          <div id="grc-content-field">
+            <span id="grc-content-label">Movement:</span>
+            <span id="grc-content-value">${action.movement}</span>
           </div>
           ` : ''}
           ${action.notes ? `
-          <div id="am-content-field-notes">
-            <span id="am-content-label">Description:</span>
-            <p id="am-content-notes">${action.notes}</p>
+          <div id="grc-content-field-notes">
+            <span id="grc-content-label">Description:</span>
+            <p id="grc-content-notes">${action.notes}</p>
           </div>
           ` : ''}
         </div>
-        <div id="am-content-footer">
-          <button id="am-send-chat-btn" type="button">
+        <div id="grc-content-footer">
+          <button id="grc-send-chat-btn" type="button">
             <i class="fas fa-comment"></i> Send to Chat
           </button>
         </div>
@@ -140,7 +140,7 @@ export class ContentRenderer {
    */
   renderHTML() {
     if (!this.currentAction) {
-      return '<div id="am-content-empty">Select an action to view details</div>';
+      return '<div id="grc-content-empty">Select an action to view details</div>';
     }
 
     const action = this.currentAction;

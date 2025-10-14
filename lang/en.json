@@ -1,11 +1,21 @@
 {
-  "ACTIONS_MANAGER": {
+  "GURPS_RULES_COMPANION": {
     "Title": "GURPS Rules Companion",
-    "SendToChat": "Send to Chat",
-    "Attack": "Attack",
-    "Defense": "Defense",
-    "Movement": "Movement",
-    "Notes": "Notes",
-    "Adjustment": "Adjustment"
+    "settings": {
+       "showSceneButton": {
+        "name": "Show Scene Control Button",
+        "hint": "Show the GURPS Rules Companion button in the scene controls"
+      },
+      "moduleEnabled": {
+        "name": "Enable GURPS Rules Companion",
+        "hint": "Toggle the module on or off"
+      }
+    },
+    "notifications": {
+      "moduleLoaded": "GURPS Rules Companion loaded. Use game.gurpsRulesCompanion.open() to open the interface.",
+      "moduleEnabled": "GURPS Rules Companion enabled",
+      "moduleDisabled": "GURPS Rules Companion disabled",
+      "selectActionFirst": "Please select an action first"
+    }
   }
 }

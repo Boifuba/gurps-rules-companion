@@ -1,3 +1,5 @@
+export const MODULE_ID = 'gurps-rules-companion';
+
 export const ICON_URLS = {
   attack: '/systems/gurps/icons/maneuvers/man-attack.png',
   dodge: 'modules/gurps-rules-companion/icons/dodge.png',
