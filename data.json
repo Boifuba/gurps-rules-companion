@@ -6,49 +6,57 @@
         "attack": false,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "no",
-        "notes": "Take no action (Active Defenses at -4 if taking Do Nothing due to Stun; roll vs HT/IQ)"
+        "notes": "Take no action (Active Defenses at -4 if taking Do Nothing due to Stun; roll vs HT/IQ)",
+        "ref": "[PDF:B00]"
       },
       {
         "name": "Change Posture",
         "attack": false,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "None",
-        "notes": "Standing, sitting, kneeling, crawling, prone, lying face up (see B364/MA98). Prone to standing takes two turns (Exception Acrobatic Stand)"
+        "notes": "Standing, sitting, kneeling, crawling, prone, lying face up (see B364/MA98). Prone to standing takes two turns (Exception Acrobatic Stand)",
+        "ref": "[PDF:B00]"
       },
       {
         "name": "Move",
         "attack": false,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "Full move",
-        "notes": "Do nothing but move (See Sprinting B354 and Acrobatic Movement MA105+)"
+        "notes": "Do nothing but move (See Sprinting B354 and Acrobatic Movement MA105+)",
+        "ref": "[PDF:B00]"
       },
       {
         "name": "Concentrate",
         "attack": false,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "None",
-        "notes": "Focus on mental task. Taking an active defense or being knocked down, injured, distracted etc. requires a Will-3 roll to maintain"
+        "notes": "Focus on mental task. Taking an active defense or being knocked down, injured, distracted etc. requires a Will-3 roll to maintain",
+        "ref": "[PDF:B00]"
       },
       {
         "name": "Evaluate",
         "attack": false,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "Step",
-        "notes": "Study a foe prior to a melee attack (+1 per turn to subsequent attacks or feints, max. +3); may also use the Evaluate Bonus to cancel out penalties from Deceptive Attacks or feints"
+        "notes": "Study a foe prior to a melee attack (+1 per turn to subsequent attacks or feints, max. +3); may also use the Evaluate Bonus to cancel out penalties from Deceptive Attacks or feints",
+        "ref": "[PDF:B00]"
       },
       {
         "name": "Wait",
         "attack": false,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "You may also perform a Step and Wait, loosing your Step in the proceeding Maneuver",
-        "notes": "Hold your action, then take an Attack, All-Out Attack, Committed Attack, Defensive Attack, Feint, Ready or Stop Hit. Specify exactly what your action will be and what will trigger it."
+        "notes": "Hold your action, then take an Attack, All-Out Attack, Committed Attack, Defensive Attack, Feint, Ready or Stop Hit. Specify exactly what your action will be and what will trigger it.",
+        "ref": "[PDF:B00]"
       },
       {
         "name": "Ready",
         "attack": false,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "You can move only a step.",
-        "notes": "Ready or reload a weapon, adjust reach (B269), change grip, change hands (MA102). "
+        "notes": "Ready or reload a weapon, adjust reach (B269), change grip, change hands (MA102). ",
+                "ref": "[PDF:B00]"
+
       }
     ],
     "meleeAttacks": [
@@ -57,21 +65,27 @@
         "attack": true,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "You can move only a step.",
-        "notes": "Attack unarmed or with a ready weapon, you make take a step before or after you attack."
+        "notes": "Attack unarmed or with a ready weapon, you make take a step before or after you attack.",
+                "ref": "[PDF:B00]"
+
       },
       {
         "name": "Move and Attack",
         "attack": true,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "You can performa a fulll move. -2 to avoid falling.",
-        "notes": "Move and attack at a penalty (Ranged: -2 or weapon's bulk; non-slam Melee: -4, max. skill 9). For thrusting attacks, may use slam damage (HP x velocity/100). Not compatible with Flurry of Blows, Mighty Blow, Giant Step, Combos, Rapid Strike or Decepctive Attack (except Slams or cinematics techiniques wich require final effective skill of at least 10). If you attacked using an arm, you cannot use that arm to parry (if the attach involved a fist, elbon or weapon) or block (if you user a shield or cloak). If you used any other body part to attack, you cannot dodge. You can use any other defense but you cannot never retreat."
+        "notes": "Move and attack at a penalty (Ranged: -2 or weapon's bulk; non-slam Melee: -4, max. skill 9). For thrusting attacks, may use slam damage (HP x velocity/100). Not compatible with Flurry of Blows, Mighty Blow, Giant Step, Combos, Rapid Strike or Decepctive Attack (except Slams or cinematics techiniques wich require final effective skill of at least 10). If you attacked using an arm, you cannot use that arm to parry (if the attach involved a fist, elbon or weapon) or block (if you user a shield or cloak). If you used any other body part to attack, you cannot dodge. You can use any other defense but you cannot never retreat.",
+                "ref": "[PDF:B00]"
+
       },
       {
         "name": "Defensive Attack",
         "attack": true,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "You can move only a step.",
-        "notes": "Balanced weapon: +1 Parry/Block, Unbalanced weapon: +1 Parry/Block with different weapon or Parry with the same weapon, Kick: +2 to avoid Leg Grapple and DX rolls to avoid falling. -2 to damage (or -1 per die if worse), foe gets +1 to defend against a grab or grapple"
+        "notes": "Balanced weapon: +1 Parry/Block, Unbalanced weapon: +1 Parry/Block with different weapon or Parry with the same weapon, Kick: +2 to avoid Leg Grapple and DX rolls to avoid falling. -2 to damage (or -1 per die if worse), foe gets +1 to defend against a grab or grapple",
+                "ref": "[PDF:B00]"
+
       }
     ],
     "Committed Attack": [
@@ -80,14 +94,18 @@
         "attack": true,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "Step",
-        "notes": "+2 to hit, or take two steps at -2 to hit for a total modifier of 0. May move before or after an attack. The attacker cannot parry with the hand(s) he used to attack, block if he attacked with his shield or cloak, or dodge if he kicked. He can use any other defense, but at -2. He cannot retreat. "
+        "notes": "+2 to hit, or take two steps at -2 to hit for a total modifier of 0. May move before or after an attack. The attacker cannot parry with the hand(s) he used to attack, block if he attacked with his shield or cloak, or dodge if he kicked. He can use any other defense, but at -2. He cannot retreat. ",
+                "ref": "[PDF:B00]"
+
       },
       {
         "name": "Strong",
         "attack": true,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "Step",
-        "notes": "+1 to damage (or +1 per two full damage dice), ST-based attacks only, may take 2 steps at -2 to skill, may move before or after an attack "
+        "notes": "+1 to damage (or +1 per two full damage dice), ST-based attacks only, may take 2 steps at -2 to skill, may move before or after an attack ",
+                "ref": "[PDF:B00]"
+
       }
     ],
     "All-Out Attacks Melee": [
@@ -96,35 +114,45 @@
         "attack": true,
         "defenses": { "dodge": false, "block": false, "parry": false },
         "movement": "Half forward.",
-        "notes": "+4 to hit"
+        "notes": "+4 to hit",
+                "ref": "[PDF:B00]"
+
       },
       {
         "name": "Double",
         "attack": true,
         "defenses": { "dodge": false, "block": false, "parry": false },
         "movement": "Half forward.",
-        "notes": "2 attacks on same foe with ready weapon (-4 to off-hand without Ambidexterity)"
+        "notes": "2 attacks on same foe with ready weapon (-4 to off-hand without Ambidexterity)",
+                "ref": "[PDF:B00]"
+
       },
       {
         "name": "Feint",
         "attack": true,
         "defenses": { "dodge": false, "block": false, "parry": false },
         "movement": "Half forward.",
-        "notes": "Make one feint and one attack on the same foe."
+        "notes": "Make one feint and one attack on the same foe.",
+                "ref": "[PDF:B00]"
+
       },
       {
         "name": "Long",
         "attack": true,
         "defenses": { "dodge": false, "block": false, "parry": false },
         "movement": "Half forward.",
-        "notes": "Increase reach by 1 yard (Swing attacks at -2 dmg or -1 per die), may end in crouch (MA87)"
+        "notes": "Increase reach by 1 yard (Swing attacks at -2 dmg or -1 per die), may end in crouch (MA87)",
+                "ref": "[PDF:B00]"
+
       },
       {
         "name": "Strong",
         "attack": true,
         "defenses": { "dodge": false, "block": false, "parry": false },
         "movement": "Half forward.",
-        "notes": "+2 to damage (or +1 per damage die)"
+        "notes": "+2 to damage (or +1 per damage die)",
+                "ref": "[PDF:B00]"
+
       }
     ],
     "rangedAttacks": [
@@ -133,7 +161,9 @@
         "attack": true,
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "You can move only a step. You get no step if your two-handed weapon is braced",
-        "notes": "Taking an active defense spoils your Aim; if you are injured, make a Will roll or lose your Aim. Aim a ranged weapon to get its Acc bonus (+1 for bracing, +1 for 2 turns, +2 for 3+ turns, the combined bonus from all targeting systems cannot exceed the weapons base Accuracy)."
+        "notes": "Taking an active defense spoils your Aim; if you are injured, make a Will roll or lose your Aim. Aim a ranged weapon to get its Acc bonus (+1 for bracing, +1 for 2 turns, +2 for 3+ turns, the combined bonus from all targeting systems cannot exceed the weapons base Accuracy).",
+                "ref": "[PDF:B00]"
+
       }
     ],
     "All-Out Attacks Ranged": [
@@ -142,14 +172,18 @@
         "attack": true,
         "defenses": { "dodge": false, "block": false, "parry": false },
         "movement": "Half forward.",
-        "notes": "+1 to hit"
+        "notes": "+1 to hit",
+                "ref": "[PDF:B00]"
+
       },
       {
         "name": "All-Out Suppression Fire",
         "attack": true,
         "defenses": { "dodge": false, "block": false, "parry": false },
         "movement": "Half forward.",
-        "notes": "RoF 5+ targets 2 yard zone - RoF 10+ suppress multiple, adjacent 2 yard zones with 5+ Shots/zone"
+        "notes": "RoF 5+ targets 2 yard zone - RoF 10+ suppress multiple, adjacent 2 yard zones with 5+ Shots/zone",
+                "ref": "[PDF:B00]"
+
       }
     ]
   },
@@ -159,21 +193,27 @@
       "attack": false,
       "defenses": { "dodge": true, "block": true, "parry": true },
       "movement": "Step",
-      "notes": "Two different Defenses against one attack"
+      "notes": "Two different Defenses against one attack",
+              "ref": "[PDF:B00]"
+
     },
     {
       "name": "All-Out Defense Mental",
       "attack": false,
       "defenses": { "dodge": true, "block": true, "parry": true },
       "movement": "Step",
-      "notes": "+2 to all resistance rolls against magic, psi, and anything similar. This bonus persists until your next turn"
+      "notes": "+2 to all resistance rolls against magic, psi, and anything similar. This bonus persists until your next turn",
+              "ref": "[PDF:B00]"
+
     },
     {
       "name": "Dodge",
       "attack": false,
       "defenses": { "dodge": true, "block": false, "parry": false },
       "movement": "none",
-      "notes": "<b>Dodge and Drop / Dive Scrificial</b>: +3 to Dodge - may take a step before drop, ranged attacks only If you make your dodge roll, you get hit - if you fail, original victim gets his defense roll.<br><br><b>Dodge Acrobatics</b>: 2/+2 to Dodge - once per turn, can be combined with retreat."
+      "notes": "<b>Dodge and Drop / Dive Scrificial</b>: +3 to Dodge - may take a step before drop, ranged attacks only If you make your dodge roll, you get hit - if you fail, original victim gets his defense roll.<br><br><b>Dodge Acrobatics</b>: 2/+2 to Dodge - once per turn, can be combined with retreat.",
+              "ref": "[PDF:B00]"
+
     },
  
     {
@@ -181,14 +221,17 @@
       "attack": false,
       "defenses": { "dodge": false, "block": false, "parry": true },
       "movement": "none",
-      "notes": "<b>Flail</b>: -4, fencing weapons can’t parry at all<br><br><b>Thrown</b>: -1 if (Large, eg. spear), -2 if (Small, eg. knife)<br><br><b>Consecutive</b>: -4 if you use the same hand in the same round. -2 if you use fencing or with Weapon Master/Trained by a Master. -1 if you use fencing with Weapon Master/Trained by a Master<br><br><b>Cross</b>: Commit two ready melee weapons to a single Parry, using the better Parry score +2 and combining their weights (for purposes of breaking). Neither hand can Parry again this turn<br><br><b>Supported</b>: Use a ready (empty) hand to support a parrying weapon for +1 as if it were a two-handed weapon. Neither hand can parry again"
+      "notes": "<b>Flail</b>: -4, fencing weapons can’t parry at all<br><br><b>Thrown</b>: -1 if (Large, eg. spear), -2 if (Small, eg. knife)<br><br><b>Consecutive</b>: -4 if you use the same hand in the same round. -2 if you use fencing or with Weapon Master/Trained by a Master. -1 if you use fencing with Weapon Master/Trained by a Master<br><br><b>Cross</b>: Commit two ready melee weapons to a single Parry, using the better Parry score +2 and combining their weights (for purposes of breaking). Neither hand can Parry again this turn<br><br><b>Supported</b>: Use a ready (empty) hand to support a parrying weapon for +1 as if it were a two-handed weapon. Neither hand can parry again",
+      "ref": "[PDF:B00]"
         },
+
     {
       "name": "Parry - Unarmed",
       "attack": false,
       "defenses": { "dodge": false, "block": false, "parry": true },
       "movement": "none",
-      "notes": "<b>DX / Karate / Brawling</b>: Use highest to Parry with one free hand<br><br><b>Wrestling / Sumo</b>: Need to use two hands to Parry<br><br><b>Weapon Swing Attack</b>: -3, 0 if you use Karate or Judo <br><br><b>With Legs</b>: Needs Karate / Brawling - can only parry attacks below the waist, can not retreat, once per Turn"
+      "notes": "<b>DX / Karate / Brawling</b>: Use highest to Parry with one free hand<br><br><b>Wrestling / Sumo</b>: Need to use two hands to Parry<br><br><b>Weapon Swing Attack</b>: -3, 0 if you use Karate or Judo <br><br><b>With Legs</b>: Needs Karate / Brawling - can only parry attacks below the waist, can not retreat, once per Turn",
+      "ref": "[PDF:B00]"
 
     },
      {
@@ -196,14 +239,15 @@
       "attack": false,
       "defenses": { "dodge": false, "block": true, "parry": false },
       "movement": "none",
-      "notes": "<b>Consecutive</b>: -5<br><br><b>Flail</b>:-2<br><br><b>Block</b>: +1.<br><br>You can not Block Bullets or Beam Weapons"
+      "notes": "<b>Consecutive</b>: -5<br><br><b>Flail</b>:-2<br><br><b>Block</b>: +1.<br><br>You can not Block Bullets or Beam Weapons",
+      "ref": "[PDF:B00]"
      },
      {
       "name": "Retreat",
       "attack": false,
       "defenses": { "dodge": false, "block": false, "parry": false },
       "movement": "none",
-      "notes": "<b>Dodge</b>: +3<br><br><b>Parry</b>: +1, +3 if using Fencing Weapon / Judo / Karate<br><br><b>Close Combat</b>: Not possible.<br><br>You can not Block Bullets or Beam Weapons",
+      "notes": "<b>Dodge</b>: +3  <br><br><b>Parry</b>: +1, +3 if using Fencing Weapon / Judo / Karate<br><br><b>Close Combat</b>: Not possible.<br><br>You can not Block Bullets or Beam Weapons",
       "special": true
     }
   ],
