@@ -7,7 +7,7 @@
         "defenses": { "dodge": true, "block": true, "parry": true },
         "movement": "no",
         "notes": "Take no action (Active Defenses at -4 if taking Do Nothing due to Stun; roll vs HT/IQ)",
-        "ref": "[PDF:B00]"
+        "ref": "B38"
       },
       {
         "name": "Change Posture",
@@ -328,7 +328,7 @@
     },
     {
       "name": "Spraying Fire",
-       "notes": "RoF 5+ weapon may attack multiple targets, must be within 30° angle, engaged in succession, +1 Rcl 2nd target +2 Rcl 3rd target and so on. RoF -16 looses 1 shot/yard, RoF 16+ looses 2 shot/yard. Attack roll for each target with effective RoF",
+       "notes": "RoF 5+ weapon may attack multiple targets, must be within 30° angle, engaged in succession, +1 Rcl 2nd target +2 Rcl 3rd target and so on. RoF -16 looses 1 shot/yard, RoF 16+ looses 2 shot/yard. Attack roll for each target with effective RoF [PDF:B00]",
       "special": true
     }
     

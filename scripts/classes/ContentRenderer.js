@@ -72,6 +72,31 @@ export class ContentRenderer {
     return action.special === true;
   }
 
+  /**
+   * Process text to wrap [PDF: XXX] in span with pdflink class
+   * @param {string} text - The text to process
+   * @returns {string} Processed text with PDF links wrapped
+   */
+  processPdfLinks(text) {
+    if (!text) return text;
+    return text.replace(/\[PDF:\s*([^\]]+)\]/g, '<span class="pdflink" data-original-pageref="$1">$1</span>');
+  }
+
+  /**
+   * Setup click handlers for PDF links
+   */
+  setupPdfLinkHandlers() {
+    $(document).off('click', '.pdflink');
+    $(document).on('click', '.pdflink', (event) => {
+      event.preventDefault();
+      const element = $(event.target);
+      const pageref = element.data('original-pageref');
+      if (pageref && typeof GURPS !== 'undefined' && GURPS.executeOTF) {
+        GURPS.executeOTF(`[PDF:${pageref}]`);
+      }
+    });
+  }
+
 
   /**
    * Generate HTML for special action
@@ -82,10 +107,16 @@ export class ContentRenderer {
     return `
       <div id="grc-content-display" class="grc-special-content">
         <div id="grc-content-body">
+          ${action.ref ? `
+          <div id="grc-content-field">
+            <span id="grc-content-label">Reference:</span>
+            <span id="grc-content-value">${this.processPdfLinks(action.ref)}</span>
+          </div>
+          ` : ''}
           ${action.notes ? `
           <div id="grc-content-field-notes">
             <span id="grc-content-label">Description:</span>
-            <p id="grc-content-notes">${action.notes}</p>
+            <p id="grc-content-notes">${this.processPdfLinks(action.notes)}</p>
           </div>
           ` : ''}
         </div>
@@ -118,10 +149,16 @@ export class ContentRenderer {
             <span id="grc-content-value">${action.movement}</span>
           </div>
           ` : ''}
+          ${action.ref ? `
+          <div id="grc-content-field">
+            <span id="grc-content-label">Reference:</span>
+            <span id="grc-content-value">${this.processPdfLinks(action.ref)}</span>
+          </div>
+          ` : ''}
           ${action.notes ? `
           <div id="grc-content-field-notes">
             <span id="grc-content-label">Description:</span>
-            <p id="grc-content-notes">${action.notes}</p>
+            <p id="grc-content-notes">${this.processPdfLinks(action.notes)}</p>
           </div>
           ` : ''}
         </div>

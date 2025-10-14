@@ -78,6 +78,7 @@ export class ChatHandler {
         <div class="grc-chat-category"><strong>Category:</strong> ${this.formatCategoryName(category)}</div>
         <div class="grc-chat-field"><strong>Attack:</strong> ${action.attack ? 'Yes' : 'No'}</div>
         <div class="grc-chat-field"><strong>Defenses:</strong> ${defenses}</div>
+        ${action.ref ? `<div class="grc-chat-field"><strong>Reference:</strong> ${action.ref}</div>` : ''}
         ${notesContent ? `<div class="grc-chat-notes"><strong>Notes:</strong> ${notesContent}</div>` : ''}
       </div>
     `;

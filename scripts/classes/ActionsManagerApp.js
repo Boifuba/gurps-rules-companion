@@ -126,6 +126,8 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
     const element = this.element;
     if (!element) return;
 
+    this.contentRenderer.setupPdfLinkHandlers();
+
     element.querySelectorAll('[data-column1-button]').forEach(button => {
       button.addEventListener('click', (event) => {
         event.preventDefault();
@@ -158,7 +160,7 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
       });
     });
 
-    const chatButton = element.querySelector('#am-send-chat-btn');
+    const chatButton = element.querySelector('#grc-send-chat-btn');
     if (chatButton) {
       chatButton.addEventListener('click', (event) => {
         event.preventDefault();
