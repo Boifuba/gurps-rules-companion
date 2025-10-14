@@ -62,6 +62,11 @@ export class AccordionManager {
     this.selectedColumn2 = null;
   }
 
+  reset() {
+    this.clearAll();
+    this.notifyListeners();
+  }
+
   addListener(callback) {
     this.listeners.push(callback);
   }

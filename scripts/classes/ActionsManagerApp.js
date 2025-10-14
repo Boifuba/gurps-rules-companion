@@ -3,6 +3,7 @@ import { AccordionManager } from './AccordionManager.js';
 import { ActionButton } from './ActionButton.js';
 import { ContentRenderer } from './ContentRenderer.js';
 import { ChatHandler } from './ChatHandler.js';
+import { SettingsModal } from './SettingsModal.js';
 
 export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
@@ -18,6 +19,11 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
     this.currentSelectedButton = null;
     this.currentMainCategory = null;
     this.currentSubcategory = null;
+
+    this.settingsModal = new SettingsModal(
+      this.dataManager,
+      (customData) => this.handleCustomDataSaved(customData)
+    );
 
     this.chatHandler.setRenderer(this.contentRenderer);
   }
@@ -167,6 +173,14 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
         this.handleSendToChat();
       });
     }
+
+    const settingsButton = element.querySelector('#grc-settings-btn');
+    if (settingsButton) {
+      settingsButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        this.handleOpenSettings();
+      });
+    }
   }
 
   handleActionButtonClick(actionId) {
@@ -193,6 +207,18 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
     const action = this.currentSelectedButton.getAction();
     const category = this.currentSelectedButton.getCategory();
     this.chatHandler.sendToChat(action, category);
+  }
+
+  handleOpenSettings() {
+    this.settingsModal.show();
+  }
+
+  async handleCustomDataSaved(customData) {
+    await this.dataManager.setCustomData(customData);
+    this.accordionManager.reset();
+    this.currentSelectedButton = null;
+    this.contentRenderer.setAction(null);
+    this.render();
   }
 
   static async show() {

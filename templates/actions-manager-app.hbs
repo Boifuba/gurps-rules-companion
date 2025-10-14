@@ -1,6 +1,11 @@
 <div id="grc-container">
   <aside id="grc-column-1" class="grc-column">
-    <div class="grc-column-header">Categories</div>
+    <div class="grc-column-header">
+      <span>Categories</span>
+      <button id="grc-settings-btn" class="grc-settings-btn" type="button" title="Settings">
+        <i class="fas fa-cog"></i>
+      </button>
+    </div>
     <div class="grc-button-list">
       {{#each column1Categories}}
       <button
