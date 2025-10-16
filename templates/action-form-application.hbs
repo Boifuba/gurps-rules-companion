@@ -1,0 +1,32 @@
+<form id="grc-action-form" class="grc-action-form">
+  <div class="form-group">
+    <label>Action Name:</label>
+    <input type="text" name="name" value="{{action.name}}" placeholder="e.g., Quick Draw" required />
+  </div>
+  <div class="form-group">
+    <label>Reference:</label>
+    <input type="text" name="ref" value="{{action.ref}}" placeholder="e.g., B123 or MA45" />
+  </div>
+  <div class="form-group">
+    <label>Notes:</label>
+    <textarea name="notes" rows="4" placeholder="Any additional notes">{{action.notes}}</textarea>
+  </div>
+  <div class="form-group">
+    <label>Description:</label>
+    <textarea name="description" rows="6" placeholder="Full description of the action">{{action.description}}</textarea>
+  </div>
+  <div class="form-group">
+    <label>Tags (comma separated):</label>
+    <input type="text" name="tags" value="{{action.tags}}" placeholder="e.g., combat, melee" />
+  </div>
+
+  <div class="grc-action-form-buttons">
+    <button type="submit" class="grc-btn-save">
+      <i class="fas fa-check"></i> {{#if isEdit}}Save Changes{{else}}Add Action{{/if}}
+    </button>
+    <button id="grc-action-cancel-btn" type="button" class="grc-btn-cancel">
+      <i class="fas fa-times"></i> Cancel
+    </button>
+  </div>
+</form>
+

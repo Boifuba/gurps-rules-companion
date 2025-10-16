@@ -1,4 +1,5 @@
 import { DataManager } from './DataManager.js';
+import { ActionFormApplication } from './ActionFormApplication.js';
 
 export class SettingsModal extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.api.ApplicationV2
@@ -207,7 +208,7 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
     let html_content = '<div class="grc-actions-items">';
 
     if (defaultActions.length > 0) {
-      html_content += '<h5 class="grc-section-title">Default Actions</h5>';
+      // html_content += '<h5 class="grc-section-title">Default Actions</h5>';
       defaultActions.forEach((action, index) => {
         const isModified = this.dataManager.isActionModified(category, subcategory, index);
         html_content += `
@@ -281,83 +282,38 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
       finalSubcategory = newSubcategoryInput;
     }
 
-    this.showActionForm(finalCategory, finalSubcategory);
-  }
-
-  showActionForm(category, subcategory = '', existingAction = null, actionIndex = null, source = 'custom') {
-    const isEdit = existingAction !== null;
-
-    const content = `
-      <form class="grc-action-form">
-        <div class="form-group">
-          <label>Action Name:</label>
-          <input type="text" name="name" value="${isEdit ? existingAction.name : ''}" placeholder="e.g., Quick Draw" required />
-        </div>
-        <div class="form-group">
-          <label>Reference:</label>
-          <input type="text" name="ref" value="${isEdit ? (existingAction.ref || '') : ''}" placeholder="e.g., B123 or MA45" />
-        </div>
-        <div class="form-group">
-          <label>Notes:</label>
-          <textarea name="notes" rows="4" placeholder="Any additional notes">${isEdit ? (existingAction.notes || '') : ''}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Description:</label>
-          <textarea name="description" rows="6" placeholder="Full description of the action">${isEdit ? (existingAction.description || '') : ''}</textarea>
-        </div>
-        <div class="form-group">
-          <label>Tags (comma separated):</label>
-          <input type="text" name="tags" value="${isEdit ? (existingAction.tags ? existingAction.tags.join(', ') : '') : ''}" placeholder="e.g., combat, melee" />
-        </div>
-        <button type="submit">${isEdit ? 'Save Changes' : 'Add Action'}</button>
-      </form>
-    `;
-
-    new Dialog({
-      title: isEdit ? 'Edit Action' : 'Add New Action',
-      content: content,
-      buttons: {
-        save: {
-          icon: '<i class="fas fa-check"></i>',
-          label: isEdit ? 'Save' : 'Add',
-          callback: (html) => {
-            const form = html[0].querySelector('.grc-action-form');
-            const formData = new FormData(form);
-            const newAction = {
-              name: formData.get('name'),
-              ref: formData.get('ref'),
-              notes: formData.get('notes'),
-              description: formData.get('description'),
-              tags: formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag !== '')
-            };
-
-            if (isEdit) {
-              this.dataManager.updateAction(category, subcategory, actionIndex, newAction, source);
-            } else {
-              this.dataManager.addAction(category, subcategory, newAction);
-            }
-            this.onSave(this.dataManager.customData);
-            this.updateActionsList();
-            // this.render(); // Removido para evitar loop infinito
-          }
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: 'Cancel'
-        }
+    ActionFormApplication.show(
+      this.dataManager,
+      (customData) => {
+        this.dataManager.setCustomData(customData);
+        this.updateActionsList();
+        this.render();
       },
-      default: 'save',
-      render: (html) => {
-        // Any post-render logic for the dialog can go here
-      }
-    }).render(true);
+      finalCategory,
+      finalSubcategory
+    );
   }
+
+
 
   editAction(index, source) {
     const category = this._state.currentCategory;
     const subcategory = this._state.currentSubcategory;
     const action = this.dataManager.getAction(category, subcategory, index, source);
-    this.showActionForm(category, subcategory, action, index, source);
+
+    ActionFormApplication.show(
+      this.dataManager,
+      (customData) => {
+        this.dataManager.setCustomData(customData);
+        this.updateActionsList();
+        this.render();
+      },
+      category,
+      subcategory,
+      action,
+      index,
+      source
+    );
   }
 
   deleteAction(index, source) {
@@ -371,7 +327,6 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
         this.dataManager.deleteAction(category, subcategory, index, source);
         this.onSave(this.dataManager.customData);
         this.updateActionsList();
-        // this.render(); // Removido para evitar loop infinito
       },
       no: () => {},
       defaultYes: false
