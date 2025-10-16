@@ -1,54 +1,66 @@
-export class SettingsModal {
-  constructor(dataManager, onSave) {
+import { DataManager } from './DataManager.js';
+
+export class SettingsModal extends foundry.applications.api.HandlebarsApplicationMixin(
+  foundry.applications.api.ApplicationV2
+) {
+  constructor(dataManager, onSave, options = {}) {
+    super(options);
     this.dataManager = dataManager;
     this.onSave = onSave;
-    this.currentCategory = '';
-    this.currentSubcategory = '';
+    this._state = {
+      currentCategory: '',
+      currentSubcategory: '',
+      newCategoryInput: '',
+      newSubcategoryInput: '',
+      actionsListHTML: '',
+      actionsListMessage: 'Select a category to view actions'
+    };
   }
 
-  checkGMPermission() {
-    if (!game.user.isGM) {
-      ui.notifications.warn('Only the GM can edit actions');
-      return false;
-    }
-    return true;
+  _setState(newState) {
+    Object.assign(this._state, newState);
+    // this.render(); // Removido para evitar loop infinito
   }
 
-  show() {
-    if (!this.checkGMPermission()) {
-      return;
-    }
-    this.render();
-  }
-
-  render() {
-    const dialog = new Dialog({
-      title: 'Manage Custom Actions',
-      content: this.getContent(),
-      buttons: {
-        add: {
-          icon: '<i class="fas fa-plus"></i>',
-          label: 'Add Action',
-          callback: (html) => this.handleAdd(html)
-        },
-        save: {
-          icon: '<i class="fas fa-save"></i>',
-          label: 'Save',
-          callback: (html) => this.handleSave(html)
-        }
-      },
-      default: 'save',
-      render: (html) => this.attachListeners(html)
-    }, {
+  static DEFAULT_OPTIONS = {
+    id: "gurps-rules-companion-settings-modal",
+    classes: ["gurps-rules-companion", "grc-settings-modal"],
+    tag: "div",
+    window: {
+      title: "Manage Custom Actions",
+      icon: "fas fa-cog",
+      minimizable: false,
+      resizable: true
+    },
+    position: {
       width: 800,
       height: 600,
-      classes: ['grc-settings-modal']
-    });
+    }
+  };
 
-    dialog.render(true);
+  static PARTS = {
+    main: {
+      template: "modules/gurps-rules-companion/templates/settings-modal.hbs"
+    }
+  };
+
+  /**
+   * Static method to show the application
+   * @param {DataManager} dataManager
+   * @param {Function} onSave
+   */
+  static show(dataManager, onSave) {
+    if (!game.user.isGM) {
+      ui.notifications.warn('Only the GM can edit actions');
+      return;
+    }
+    const app = new SettingsModal(dataManager, onSave);
+    app.render(true);
   }
 
-  getContent() {
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+
     const mainCategories = this.dataManager.getMainCategories();
     const allCategories = [...mainCategories];
 
@@ -58,146 +70,114 @@ export class SettingsModal {
       }
     });
 
-    let html = `
-      <div class="grc-settings-container">
-        <div class="grc-settings-section">
-          <h3>Manage Actions</h3>
-          <p>Edit default actions or add custom ones. Modified default actions are marked with a star. Changes are saved globally for all players.</p>
-        </div>
+    context.allCategories = allCategories.map(cat => ({
+      id: cat,
+      name: this.dataManager.formatCategoryName(cat),
+      isSelected: cat === this._state.currentCategory
+    }));
 
-        <div class="grc-settings-section">
-          <div class="grc-settings-row">
-            <label>Category:</label>
-            <select id="grc-category-select" class="grc-select">
-              <option value="">-- Select Category --</option>
-              ${allCategories.map(cat => `
-                <option value="${cat}">${this.dataManager.formatCategoryName(cat)}</option>
-              `).join('')}
-              <option value="__new__">+ Create New Category</option>
-            </select>
-          </div>
+    context.isNewCategory = this._state.currentCategory === '__new__';
+    context.newCategoryInput = this._state.newCategoryInput;
 
-          <div id="grc-new-category-row" class="grc-settings-row" style="display: none;">
-            <label>New Category Name:</label>
-            <input type="text" id="grc-new-category-input" class="grc-input" placeholder="e.g., myCustomCategory" />
-          </div>
+    context.isSubcategoryVisible = this._state.currentCategory && this._state.currentCategory !== '__new__';
+    context.subcategories = [];
+    context.newSubcategoryInput = this._state.newSubcategoryInput;
 
-          <div id="grc-subcategory-row" class="grc-settings-row" style="display: none;">
-            <label>Subcategory (optional):</label>
-            <select id="grc-subcategory-select" class="grc-select">
-              <option value="">-- Direct Actions --</option>
-            </select>
-            <input type="text" id="grc-new-subcategory-input" class="grc-input" placeholder="Or type new subcategory" style="margin-top: 8px;" />
-          </div>
-        </div>
-
-        <div class="grc-settings-section">
-          <h4>Actions in Selected Category</h4>
-          <div id="grc-actions-list" class="grc-actions-list">
-            <p class="grc-empty-message">Select a category to view actions</p>
-          </div>
-        </div>
-
-        <div class="grc-settings-section">
-          <button id="grc-reset-custom" type="button" class="grc-btn-reset">
-            <i class="fas fa-eraser"></i> Reset Custom Actions
-          </button>
-          <button id="grc-reset-all" type="button" class="grc-btn-reset-all">
-            <i class="fas fa-undo"></i> Reset All to Defaults
-          </button>
-        </div>
-      </div>
-    `;
-
-    return html;
-  }
-
-  attachListeners(html) {
-    const categorySelect = html.find('#grc-category-select');
-    const newCategoryRow = html.find('#grc-new-category-row');
-    const subcategoryRow = html.find('#grc-subcategory-row');
-    const subcategorySelect = html.find('#grc-subcategory-select');
-    const actionsList = html.find('#grc-actions-list');
-
-    categorySelect.on('change', (e) => {
-      const value = e.target.value;
-
-      if (value === '__new__') {
-        newCategoryRow.show();
-        subcategoryRow.hide();
-        actionsList.html('<p class="grc-empty-message">Create a new category first</p>');
-      } else if (value) {
-        newCategoryRow.hide();
-        subcategoryRow.show();
-        this.updateSubcategoryOptions(html, value);
-        this.updateActionsList(html, value);
-      } else {
-        newCategoryRow.hide();
-        subcategoryRow.hide();
-        actionsList.html('<p class="grc-empty-message">Select a category to view actions</p>');
-      }
-    });
-
-    subcategorySelect.on('change', (e) => {
-      const category = categorySelect.val();
-      const subcategory = e.target.value;
-      if (category) {
-        this.updateActionsList(html, category, subcategory);
-      }
-    });
-
-    this.attachActionListeners(html);
-  }
-
-  attachActionListeners(html) {
-    html.find('.grc-action-edit').on('click', (e) => {
-      const index = $(e.currentTarget).data('index');
-      const source = $(e.currentTarget).data('source');
-      this.editAction(html, index, source);
-    });
-
-    html.find('.grc-action-delete').on('click', (e) => {
-      const index = $(e.currentTarget).data('index');
-      const source = $(e.currentTarget).data('source');
-      this.deleteAction(html, index, source);
-    });
-
-    html.find('#grc-reset-custom').on('click', (e) => {
-      this.handleResetCustom();
-    });
-
-    html.find('#grc-reset-all').on('click', (e) => {
-      this.handleResetAll();
-    });
-  }
-
-  updateSubcategoryOptions(html, category) {
-    const subcategorySelect = html.find('#grc-subcategory-select');
-    const hasSubcategories = this.dataManager.hasSubcategories(category);
-
-    subcategorySelect.empty();
-    subcategorySelect.append('<option value="">-- Direct Actions --</option>');
-
-    if (hasSubcategories) {
-      const subcategories = this.dataManager.getSubcategories(category);
-      subcategories.forEach(sub => {
-        subcategorySelect.append(`<option value="${sub}">${this.dataManager.formatCategoryName(sub)}</option>`);
-      });
+    if (context.isSubcategoryVisible) {
+      context.subcategories = this.getSubcategoryOptions(this._state.currentCategory).map(sub => ({
+        id: sub,
+        name: this.dataManager.formatCategoryName(sub),
+        isSelected: sub === this._state.currentSubcategory
+      }));
     }
 
-    if (this.customData[category] && typeof this.customData[category] === 'object' && !Array.isArray(this.customData[category])) {
-      Object.keys(this.customData[category]).forEach(sub => {
-        if (!subcategorySelect.find(`option[value="${sub}"]`).length) {
-          subcategorySelect.append(`<option value="${sub}">${this.dataManager.formatCategoryName(sub)}</option>`);
+    context.actionsListHTML = this._state.actionsListHTML;
+    context.actionsListMessage = this._state.actionsListMessage;
+
+    return context;
+  }
+
+  getSubcategoryOptions(category) {
+    const subcategories = [];
+    const hasSubcategories = this.dataManager.hasSubcategories(category);
+
+    if (hasSubcategories) {
+      subcategories.push(...this.dataManager.getSubcategories(category));
+    }
+
+    if (this.dataManager.customData[category] && typeof this.dataManager.customData[category] === 'object' && !Array.isArray(this.dataManager.customData[category])) {
+      Object.keys(this.dataManager.customData[category]).forEach(sub => {
+        if (!subcategories.includes(sub)) {
+          subcategories.push(sub);
         }
       });
     }
+    return subcategories;
   }
 
-  updateActionsList(html, category, subcategory = '') {
-    const actionsList = html.find('#grc-actions-list');
-    this.currentCategory = category;
-    this.currentSubcategory = subcategory;
+  _onRender(context, options) {
+    super._onRender(context, options);
+
+    const element = this.element;
+    if (!element) return;
+
+    const categorySelect = element.querySelector('#grc-category-select');
+    const subcategorySelect = element.querySelector('#grc-subcategory-select');
+    const newCategoryInput = element.querySelector('#grc-new-category-input');
+    const newSubcategoryInput = element.querySelector('#grc-new-subcategory-input');
+    
+    categorySelect.addEventListener('change', (e) => this.handleCategoryChange(e.target.value));
+    subcategorySelect.addEventListener('change', (e) => this.handleSubcategoryChange(e.target.value));
+    newCategoryInput.addEventListener('input', (e) => this._setState({ newCategoryInput: e.target.value }));
+    newSubcategoryInput.addEventListener('input', (e) => this._setState({ newSubcategoryInput: e.target.value }));
+
+    this.attachActionListeners(element);
+
+    // Initial load of actions list if a category is already selected
+    if (this._state.currentCategory && this._state.currentCategory !== '__new__') {
+      this.updateActionsList();
+    }
+  }
+
+  handleCategoryChange(value) {
+    this._setState({
+      currentCategory: value,
+      currentSubcategory: '',
+      actionsListHTML: '',
+      actionsListMessage: 'Select a category to view actions'
+    });
+
+    if (value === '__new__') {
+      this._setState({ actionsListMessage: 'Create a new category first' });
+    } else if (value) {
+      this.updateActionsList();
+      this.render();
+    }
+  }
+  handleSubcategoryChange(value) {    this._setState({ currentSubcategory: value });    this.updateActionsList();    this.render();  }  attachActionListeners(element) {
+    const actionsList = element.querySelector('#grc-actions-list');
+    const addActionButton = element.querySelector('#grc-add-action-btn');
+
+    actionsList.addEventListener('click', (e) => {
+      const target = e.target.closest('.grc-action-edit, .grc-action-delete');
+      if (!target) return;
+
+      const index = target.dataset.index;
+      const source = target.dataset.source;
+
+      if (target.classList.contains('grc-action-edit')) {
+        this.editAction(index, source);
+      } else if (target.classList.contains('grc-action-delete')) {
+        this.deleteAction(index, source);
+      }
+    });
+
+    addActionButton.addEventListener('click', () => this.handleAdd());
+  }
+
+  updateActionsList() {
+    const category = this._state.currentCategory;
+    const subcategory = this._state.currentSubcategory;
 
     let defaultActions = [];
     let customActions = [];
@@ -217,7 +197,10 @@ export class SettingsModal {
     }
 
     if (defaultActions.length === 0 && customActions.length === 0) {
-      actionsList.html('<p class="grc-empty-message">No actions yet. Click "Add Action" to create one.</p>');
+      this._setState({
+        actionsListHTML: '',
+        actionsListMessage: 'No actions yet. Click "Add Action" to create one.'
+      });
       return;
     }
 
@@ -268,15 +251,17 @@ export class SettingsModal {
 
     html_content += '</div>';
 
-    actionsList.html(html_content);
-    this.attachActionListeners(html);
+    this._setState({
+      actionsListHTML: html_content,
+      actionsListMessage: ''
+    });
   }
 
-  handleAdd(html) {
-    const category = html.find('#grc-category-select').val();
-    const newCategoryInput = html.find('#grc-new-category-input').val().trim();
-    const subcategory = html.find('#grc-subcategory-select').val();
-    const newSubcategoryInput = html.find('#grc-new-subcategory-input').val().trim();
+  handleAdd() {
+    const category = this._state.currentCategory;
+    const newCategoryInput = this._state.newCategoryInput.trim();
+    const subcategory = this._state.currentSubcategory;
+    const newSubcategoryInput = this._state.newSubcategoryInput.trim();
 
     let finalCategory = category;
     let finalSubcategory = subcategory;
@@ -284,12 +269,12 @@ export class SettingsModal {
     if (category === '__new__') {
       if (!newCategoryInput) {
         ui.notifications.warn('Please enter a new category name');
-        return false;
+        return;
       }
       finalCategory = newCategoryInput;
     } else if (!category) {
       ui.notifications.warn('Please select a category');
-      return false;
+      return;
     }
 
     if (newSubcategoryInput) {
@@ -297,75 +282,63 @@ export class SettingsModal {
     }
 
     this.showActionForm(finalCategory, finalSubcategory);
-    return false;
   }
 
   showActionForm(category, subcategory = '', existingAction = null, actionIndex = null, source = 'custom') {
     const isEdit = existingAction !== null;
 
-    const formDialog = new Dialog({
+    const content = `
+      <form class="grc-action-form">
+        <div class="form-group">
+          <label>Action Name:</label>
+          <input type="text" name="name" value="${isEdit ? existingAction.name : ''}" placeholder="e.g., Quick Draw" required />
+        </div>
+        <div class="form-group">
+          <label>Reference:</label>
+          <input type="text" name="ref" value="${isEdit ? (existingAction.ref || '') : ''}" placeholder="e.g., B123 or MA45" />
+        </div>
+        <div class="form-group">
+          <label>Notes:</label>
+          <textarea name="notes" rows="4" placeholder="Any additional notes">${isEdit ? (existingAction.notes || '') : ''}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Description:</label>
+          <textarea name="description" rows="6" placeholder="Full description of the action">${isEdit ? (existingAction.description || '') : ''}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Tags (comma separated):</label>
+          <input type="text" name="tags" value="${isEdit ? (existingAction.tags ? existingAction.tags.join(', ') : '') : ''}" placeholder="e.g., combat, melee" />
+        </div>
+        <button type="submit">${isEdit ? 'Save Changes' : 'Add Action'}</button>
+      </form>
+    `;
+
+    new Dialog({
       title: isEdit ? 'Edit Action' : 'Add New Action',
-      content: `
-        <form class="grc-action-form">
-          <div class="form-group">
-            <label>Action Name:</label>
-            <input type="text" name="name" value="${isEdit ? existingAction.name : ''}" placeholder="e.g., Quick Draw" required />
-          </div>
-          <div class="form-group">
-            <label>Reference:</label>
-            <input type="text" name="ref" value="${isEdit ? (existingAction.ref || '') : ''}" placeholder="e.g., B123 or MA45" />
-          </div>
-          <div class="form-group">
-            <label>Notes:</label>
-            <textarea name="notes" rows="4">${isEdit ? (existingAction.notes || '') : ''}</textarea>
-          </div>
-          <div class="form-group">
-            <label>Attack:</label>
-            <input type="checkbox" name="attack" ${isEdit && existingAction.attack ? 'checked' : ''} />
-          </div>
-          <div class="form-group">
-            <label>Movement:</label>
-            <input type="checkbox" name="movement" ${isEdit && existingAction.movement ? 'checked' : ''} />
-          </div>
-          <div class="form-group">
-            <label>Dodge:</label>
-            <input type="checkbox" name="defense_dodge" ${isEdit && existingAction.defenses?.dodge ? 'checked' : ''} />
-          </div>
-          <div class="form-group">
-            <label>Block:</label>
-            <input type="checkbox" name="defense_block" ${isEdit && existingAction.defenses?.block ? 'checked' : ''} />
-          </div>
-          <div class="form-group">
-            <label>Parry:</label>
-            <input type="checkbox" name="defense_parry" ${isEdit && existingAction.defenses?.parry ? 'checked' : ''} />
-          </div>
-        </form>
-      `,
+      content: content,
       buttons: {
         save: {
           icon: '<i class="fas fa-check"></i>',
-          label: 'Save',
+          label: isEdit ? 'Save' : 'Add',
           callback: (html) => {
-            const formData = new FormData(html.find('form')[0]);
-            const action = {
+            const form = html[0].querySelector('.grc-action-form');
+            const formData = new FormData(form);
+            const newAction = {
               name: formData.get('name'),
-              ref: formData.get('ref') || undefined,
-              notes: formData.get('notes') || undefined,
-              attack: formData.get('attack') === 'on',
-              movement: formData.get('movement') === 'on',
-              defenses: {
-                dodge: formData.get('defense_dodge') === 'on',
-                block: formData.get('defense_block') === 'on',
-                parry: formData.get('defense_parry') === 'on'
-              }
+              ref: formData.get('ref'),
+              notes: formData.get('notes'),
+              description: formData.get('description'),
+              tags: formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag !== '')
             };
 
-            if (!action.name) {
-              ui.notifications.warn('Action name is required');
-              return false;
+            if (isEdit) {
+              this.dataManager.updateAction(category, subcategory, actionIndex, newAction, source);
+            } else {
+              this.dataManager.addAction(category, subcategory, newAction);
             }
-
-            this.saveAction(category, subcategory, action, actionIndex, source);
+            this.onSave(this.dataManager.customData);
+            this.updateActionsList();
+            // this.render(); // Removido para evitar loop infinito
           }
         },
         cancel: {
@@ -373,166 +346,37 @@ export class SettingsModal {
           label: 'Cancel'
         }
       },
-      default: 'save'
-    }, {
-      width: 500
-    });
-
-    formDialog.render(true);
+      default: 'save',
+      render: (html) => {
+        // Any post-render logic for the dialog can go here
+      }
+    }).render(true);
   }
 
-  async saveAction(category, subcategory, action, actionIndex = null, source = 'custom') {
-    try {
-      if (source === 'default') {
-        if (actionIndex !== null) {
-          await this.dataManager.updateDefaultAction(category, subcategory, actionIndex, action);
-        } else {
-          await this.dataManager.addCustomAction(category, subcategory, action);
-        }
-      } else {
-        if (actionIndex !== null) {
-          await this.dataManager.updateCustomAction(category, subcategory, actionIndex, action);
-        } else {
-          await this.dataManager.addCustomAction(category, subcategory, action);
-        }
-      }
-
-      ui.notifications.info(`Action ${actionIndex !== null ? 'updated' : 'added'} successfully`);
-      if (this.onSave) {
-        this.onSave(this.dataManager.customData);
-      }
-      this.show();
-    } catch (error) {
-      console.error('Error saving action:', error);
-      ui.notifications.error('Failed to save action');
-    }
-  }
-
-  editAction(html, index, source) {
-    const category = html.find('#grc-category-select').val();
-    const subcategory = html.find('#grc-subcategory-select').val();
-
-    let action;
-    if (source === 'default') {
-      if (subcategory) {
-        action = this.dataManager.defaultData[category][subcategory][index];
-      } else {
-        action = this.dataManager.defaultData[category][index];
-      }
-    } else {
-      if (subcategory) {
-        action = this.dataManager.customData[category][subcategory][index];
-      } else {
-        action = this.dataManager.customData[category][index];
-      }
-    }
-
+  editAction(index, source) {
+    const category = this._state.currentCategory;
+    const subcategory = this._state.currentSubcategory;
+    const action = this.dataManager.getAction(category, subcategory, index, source);
     this.showActionForm(category, subcategory, action, index, source);
   }
 
-  deleteAction(html, index, source) {
-    const category = html.find('#grc-category-select').val();
-    const subcategory = html.find('#grc-subcategory-select').val();
+  deleteAction(index, source) {
+    const category = this._state.currentCategory;
+    const subcategory = this._state.currentSubcategory;
 
     Dialog.confirm({
       title: 'Delete Action',
       content: '<p>Are you sure you want to delete this action?</p>',
-      yes: async () => {
-        try {
-          if (source === 'default') {
-            await this.dataManager.deleteDefaultAction(category, subcategory, index);
-          } else {
-            await this.dataManager.deleteCustomAction(category, subcategory, index);
-          }
-          ui.notifications.info('Action deleted');
-          if (this.onSave) {
-            this.onSave(this.dataManager.customData);
-          }
-          this.show();
-        } catch (error) {
-          console.error('Error deleting action:', error);
-          ui.notifications.error('Failed to delete action');
-        }
-      }
+      yes: () => {
+        this.dataManager.deleteAction(category, subcategory, index, source);
+        this.onSave(this.dataManager.customData);
+        this.updateActionsList();
+        // this.render(); // Removido para evitar loop infinito
+      },
+      no: () => {},
+      defaultYes: false
     });
   }
 
-  async handleSave(html) {
-    ui.notifications.info('Changes are saved automatically');
-  }
-
-  async handleResetCustom() {
-    Dialog.confirm({
-      title: 'Reset Custom Actions',
-      content: '<p>This will delete all custom actions but keep modified default actions. Continue?</p>',
-      yes: async () => {
-        await this.dataManager.resetCustomData();
-        if (this.onSave) {
-          this.onSave(this.dataManager.customData);
-        }
-        this.show();
-      }
-    });
-  }
-
-  async handleResetAll() {
-    Dialog.confirm({
-      title: 'Reset All to Defaults',
-      content: '<p><strong>Warning:</strong> This will delete ALL custom actions and reset ALL modified actions to their original state. This cannot be undone. Continue?</p>',
-      yes: async () => {
-        await this.dataManager.resetToDefaults();
-        if (this.onSave) {
-          this.onSave(this.dataManager.customData);
-        }
-        this.show();
-      }
-    });
-  }
-
-  async handleExport() {
-    const exportData = await this.dataManager.exportAllData();
-    const dataStr = JSON.stringify(exportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `gurps-actions-${new Date().toISOString().split('T')[0]}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-    ui.notifications.info('Actions exported');
-  }
-
-  handleImport() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
-
-    input.onchange = async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      try {
-        const text = await file.text();
-        const data = JSON.parse(text);
-
-        Dialog.confirm({
-          title: 'Import Actions',
-          content: '<p><strong>Warning:</strong> This will replace ALL current data with the imported data. Continue?</p>',
-          yes: async () => {
-            await this.dataManager.importAllData(data);
-            if (this.onSave) {
-              this.onSave(this.dataManager.customData);
-            }
-            this.show();
-          }
-        });
-      } catch (error) {
-        console.error('Error importing file:', error);
-        ui.notifications.error('Failed to import file. Please check the JSON format.');
-      }
-    };
-
-    input.click();
-  }
 
 }

@@ -1,5 +1,5 @@
-import { ActionsManagerApp } from './classes/ActionsManagerApp.js';
-import { MODULE_ID, FLAG_KEYS } from './constants.js';
+let ActionsManagerApp;
+let MODULE_ID, FLAG_KEYS;
 
 class ImportCustomActionsDialog extends FormApplication {
   static get defaultOptions() {
@@ -193,8 +193,12 @@ function disableModule() {
 /**
  * Main module initialization
  */
-Hooks.once('init', () => {
+Hooks.once('init', async () => {
   console.log('GURPS Rules Companion | Initializing module');
+
+  // Dynamic imports to avoid "Unexpected token 'import'" error in non-ES module environments
+  ({ ActionsManagerApp } = await import('./classes/ActionsManagerApp.js'));
+  ({ MODULE_ID, FLAG_KEYS } = await import('./constants.js'));
 
   registerModuleSettings();
 

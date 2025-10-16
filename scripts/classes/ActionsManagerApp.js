@@ -20,10 +20,11 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
     this.currentMainCategory = null;
     this.currentSubcategory = null;
 
-    this.settingsModal = new SettingsModal(
-      this.dataManager,
-      (customData) => this.handleCustomDataSaved(customData)
-    );
+    // A instância do SettingsModal será criada e renderizada na chamada estática show()
+    // this.settingsModal = new SettingsModal(
+    //   this.dataManager,
+    //   (customData) => this.handleCustomDataSaved(customData)
+    // );
 
     this.chatHandler.setRenderer(this.contentRenderer);
   }
@@ -210,7 +211,10 @@ export class ActionsManagerApp extends foundry.applications.api.HandlebarsApplic
   }
 
   handleOpenSettings() {
-    this.settingsModal.show();
+    SettingsModal.show(
+      this.dataManager,
+      (customData) => this.handleCustomDataSaved(customData)
+    );
   }
 
   async handleCustomDataSaved(customData) {

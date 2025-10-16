@@ -414,14 +414,22 @@
 .grc-settings-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 16px;
+  gap: 8px;
 }
 
 .grc-settings-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 16px;
+  background-color: #66666625;
+  border: 1px solid #444;
+  border-radius: 6px;
+}
+
+.grc-settings-section-buttons {
+  display: flex;
+  gap: 8px;
   padding: 16px;
   background-color: #66666625;
   border: 1px solid #444;
@@ -490,7 +498,7 @@
   border: 2px solid #555;
   border-radius: 6px;
   padding: 12px;
-  min-height: 200px;
+  min-height: 300px;
   max-height: 300px;
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.2);
@@ -531,8 +539,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 14px;
-  border: 2px solid #555;
+  padding: 6px 8px;
+  border: 1px solid #555;
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.05);
   transition: all 0.2s ease;
@@ -558,7 +566,7 @@
 .grc-action-edit,
 .grc-action-delete {
   padding: 6px 10px;
-  border: 2px solid #555;
+  border: 1px solid #555;
   border-radius: 4px;
   cursor: pointer;
   background-color: transparent;
@@ -664,35 +672,19 @@
 
 .grc-btn-reset,
 .grc-btn-reset-all {
-  padding: 10px 20px;
-  border: 2px solid #555;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  background-color: transparent;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  
   width: 100%;
-  justify-content: center;
+
 }
 
 .grc-btn-reset:hover {
-  border-color: #ffa500;
-  color: #ffa500;
-  border-width: 3px;
-  box-shadow: 0 2px 6px rgba(255, 165, 0, 0.3);
+ 
 }
 
 .grc-btn-reset-all {
-  margin-top: 8px;
+ 
 }
 
 .grc-btn-reset-all:hover {
-  border-color: #ff4a4a;
-  color: #ff4a4a;
-  border-width: 3px;
-  box-shadow: 0 2px 6px rgba(255, 74, 74, 0.3);
+ 
 }

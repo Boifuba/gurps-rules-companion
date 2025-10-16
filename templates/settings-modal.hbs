@@ -1,0 +1,52 @@
+<div class="grc-settings-container">
+  {{!-- <div class="grc-settings-section">
+    <h3>Manage Actions</h3>
+    <p>Edit default actions or add custom ones. Modified default actions are marked with a star. Changes are saved globally for all players.</p>
+  </div> --}}
+
+  <div class="grc-settings-section">
+    <div class="grc-settings-row">
+      <label>Category:</label>
+      <select id="grc-category-select" class="grc-select">
+        <option value="">-- Select Category --</option>
+        {{#each allCategories}}
+          <option value="{{this.id}}" {{#if this.isSelected}}selected{{/if}}>{{this.name}}</option>
+        {{/each}}
+        <option value="__new__">+ Create New Category</option>
+      </select>
+    </div>
+
+    <div id="grc-new-category-row" class="grc-settings-row" style="display: {{#if isNewCategory}}flex{{else}}none{{/if}};">
+      <label>New Category Name:</label>
+      <input type="text" id="grc-new-category-input" class="grc-input" placeholder="e.g., myCustomCategory" value="{{newCategoryInput}}" />
+    </div>
+
+    <div id="grc-subcategory-row" class="grc-settings-row" style="display: {{#if isSubcategoryVisible}}flex{{else}}none{{/if}};">
+      <label>Subcategory (optional):</label>
+      <select id="grc-subcategory-select" class="grc-select">
+        <option value="">-- Direct Actions --</option>
+        {{#each subcategories}}
+          <option value="{{this.id}}" {{#if this.isSelected}}selected{{/if}}>{{this.name}}</option>
+        {{/each}}
+      </select>
+      <input type="text" id="grc-new-subcategory-input" class="grc-input" placeholder="Or type new subcategory" style="margin-top: 8px;" value="{{newSubcategoryInput}}" />
+    </div>
+  </div>
+
+  <div class="grc-settings-section">
+    <h4>Actions in Selected Category</h4>
+    <div id="grc-actions-list" class="grc-actions-list">
+      {{#if actionsListHTML}}
+        {{{actionsListHTML}}}
+      {{else}}
+        <p class="grc-empty-message">{{actionsListMessage}}</p>
+      {{/if}}
+    </div>
+  </div>
+
+	<div class="grc-settings-section-buttons">
+		<button id="grc-add-action-btn" type="button" class="grc-btn-add">
+			<i class="fas fa-plus"></i> Add Action
+		</button>
+	</div>
+</div>
