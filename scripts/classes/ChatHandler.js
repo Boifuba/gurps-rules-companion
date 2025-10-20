@@ -1,3 +1,5 @@
+import { normalizeNotesEntries } from './ContentRenderer.js';
+
 /**
  * ChatHandler - Manages sending action information to FoundryVTT chat
  */
@@ -43,23 +45,54 @@ export class ChatHandler {
   }
 
   /**
-   * Build notes content including movement information
+   * Apply PDF link formatting
+   * @param {string} text - Raw text
+   * @returns {string} Text with PDF links wrapped
+   */
+  processPdfLinks(text) {
+    if (this.contentRenderer && typeof this.contentRenderer.processPdfLinks === 'function') {
+      return this.contentRenderer.processPdfLinks(text);
+    }
+
+    if (!text) return text;
+    return text.replace(/\[PDF:\s*([^\]]+)\]/g, '<span class="pdflink" data-original-pageref="$1">$1</span>');
+  }
+
+  /**
+   * Build structured notes content for chat
    * @param {Object} action - The action object
-   * @returns {string} Combined notes text
+   * @returns {string} HTML string for chat notes
    */
   buildNotesForChat(action) {
-    let notesContent = '';
-
-    if (action.movement && action.movement !== 'none') {
-      notesContent += `Movement: ${action.movement}`;
+    const entries = normalizeNotesEntries(action.notes);
+    const movementValue = action.movement;
+    if (movementValue && movementValue !== 'none' && movementValue !== 'no') {
+      const movementText = typeof movementValue === 'string' ? movementValue.trim() : String(movementValue).trim();
+      if (movementText) {
+        entries.unshift({ title: 'Movement', text: movementText });
+      }
     }
 
-    if (action.notes) {
-      if (notesContent) notesContent += '<br><br>';
-      notesContent += action.notes;
-    }
+    const notesHtml = entries
+      .map((entry) => {
+        const classes = ['grc-note-entry'];
+        if (entry.isSummary) classes.push('grc-note-summary');
 
-    return notesContent;
+        const titleHtml = entry.title
+          ? `<div class="grc-note-title">${this.processPdfLinks(entry.title)}</div>`
+          : '';
+        const textHtml = entry.text
+          ? `<div class="grc-note-text">${this.processPdfLinks(entry.text)}</div>`
+          : '';
+
+        if (!titleHtml && !textHtml) return '';
+        return `<div class="${classes.join(' ')}">${titleHtml}${textHtml}</div>`;
+      })
+      .filter(Boolean)
+      .join('');
+
+    if (!notesHtml) return '';
+    return `<div class="grc-chat-notes-list">${notesHtml}</div>`;
   }
 
   /**
@@ -79,7 +112,7 @@ export class ChatHandler {
         <div class="grc-chat-field"><strong>Attack:</strong> ${action.attack ? 'Yes' : 'No'}</div>
         <div class="grc-chat-field"><strong>Defenses:</strong> ${defenses}</div>
         ${action.ref ? `<div class="grc-chat-field"><strong>Reference:</strong> ${action.ref}</div>` : ''}
-        ${notesContent ? `<div class="grc-chat-notes"><strong>Notes:</strong> ${notesContent}</div>` : ''}
+        ${notesContent ? `<div class="grc-chat-notes"><strong>Notes:</strong>${notesContent}</div>` : ''}
       </div>
     `;
   }

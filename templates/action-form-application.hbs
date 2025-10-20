@@ -8,8 +8,29 @@
     <input type="text" name="ref" value="{{action.ref}}" placeholder="e.g., B123 or MA45" />
   </div>
   <div class="form-group">
-    <label>Notes:</label>
-    <textarea name="notes" rows="4" placeholder="Any additional notes">{{action.notes}}</textarea>
+    <label>Notes Summary:</label>
+    <textarea name="notesSummary" rows="3" placeholder="Short summary for quick reference">{{action.notesSummary}}</textarea>
+  </div>
+  <div class="form-group">
+    <label>Notes Sections:</label>
+    <div id="grc-notes-sections" class="grc-note-sections-list">
+      {{#if action.notesSections.length}}
+        {{#each action.notesSections as |section index|}}
+          <div class="grc-note-section" data-index="{{index}}">
+            <div class="grc-note-section-header">
+              <input type="text" name="notesSections[{{index}}][title]" value="{{section.title}}" placeholder="Section title" />
+              <button type="button" class="grc-remove-section" data-index="{{index}}">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            <textarea name="notesSections[{{index}}][text]" rows="3" placeholder="Section details">{{section.text}}</textarea>
+          </div>
+        {{/each}}
+      {{/if}}
+    </div>
+    <button type="button" id="grc-add-note-section" class="grc-btn-add">
+      <i class="fas fa-plus"></i> Add Section
+    </button>
   </div>
   <div class="form-group">
     <label>Description:</label>
