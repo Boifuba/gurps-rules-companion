@@ -4,6 +4,8 @@ export const FLAG_KEYS = {
   DEFAULT_DATA: 'defaultData',
   CUSTOM_DATA: 'customData',
   MODIFIED_ACTIONS: 'modifiedActions',
+  DEFAULT_OVERRIDES: 'defaultOverrides',
+  DELETED_DEFAULT_ACTIONS: 'deletedDefaultActions',
   DATA_VERSION: 'dataVersion'
 };
 
