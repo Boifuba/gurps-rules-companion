@@ -48,6 +48,8 @@ class ImportCustomActionsDialog extends FormApplication {
         try {
           await game.settings.set(MODULE_ID, FLAG_KEYS.DEFAULT_DATA, data.defaultData || {});
           await game.settings.set(MODULE_ID, FLAG_KEYS.CUSTOM_DATA, data.customData || {});
+          await game.settings.set(MODULE_ID, FLAG_KEYS.DEFAULT_OVERRIDES, data.defaultOverrides || {});
+          await game.settings.set(MODULE_ID, FLAG_KEYS.DELETED_DEFAULT_ACTIONS, data.deletedDefaultActions || []);
           await game.settings.set(MODULE_ID, FLAG_KEYS.MODIFIED_ACTIONS, data.modifiedActions || []);
           await game.settings.set(MODULE_ID, FLAG_KEYS.DATA_VERSION, data.version || '');
           ui.notifications.info('Actions data imported successfully. Please reload.');
@@ -88,6 +90,8 @@ class ExportCustomActionsDialog extends FormApplication {
     try {
       const defaultData = game.settings.get(MODULE_ID, FLAG_KEYS.DEFAULT_DATA);
       const customData = game.settings.get(MODULE_ID, FLAG_KEYS.CUSTOM_DATA);
+      const defaultOverrides = game.settings.get(MODULE_ID, FLAG_KEYS.DEFAULT_OVERRIDES);
+      const deletedDefaultActions = game.settings.get(MODULE_ID, FLAG_KEYS.DELETED_DEFAULT_ACTIONS);
       const modifiedActions = game.settings.get(MODULE_ID, FLAG_KEYS.MODIFIED_ACTIONS);
       const version = game.settings.get(MODULE_ID, FLAG_KEYS.DATA_VERSION);
 
@@ -95,6 +99,8 @@ class ExportCustomActionsDialog extends FormApplication {
         version: version,
         defaultData: defaultData,
         customData: customData,
+        defaultOverrides: defaultOverrides,
+        deletedDefaultActions: deletedDefaultActions,
         modifiedActions: modifiedActions
       };
 
@@ -134,6 +140,22 @@ function registerModuleSettings() {
     config: false,
     type: Object,
     default: {}
+  });
+
+  game.settings.register(MODULE_ID, FLAG_KEYS.DEFAULT_OVERRIDES, {
+    name: 'Default Action Overrides',
+    scope: 'world',
+    config: false,
+    type: Object,
+    default: {}
+  });
+
+  game.settings.register(MODULE_ID, FLAG_KEYS.DELETED_DEFAULT_ACTIONS, {
+    name: 'Deleted Default Actions',
+    scope: 'world',
+    config: false,
+    type: Array,
+    default: []
   });
 
   game.settings.register(MODULE_ID, FLAG_KEYS.MODIFIED_ACTIONS, {

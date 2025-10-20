@@ -180,22 +180,15 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
     const category = this._state.currentCategory;
     const subcategory = this._state.currentSubcategory;
 
-    let defaultActions = [];
-    let customActions = [];
+    const isNewCategory = category === '__new__';
+    const effectiveCategory = !category || isNewCategory ? '' : category;
 
-    if (subcategory) {
-      defaultActions = this.dataManager.defaultData?.[category]?.[subcategory] || [];
-      customActions = this.dataManager.customData?.[category]?.[subcategory] || [];
-    } else {
-      const defaultData = this.dataManager.defaultData?.[category];
-      if (Array.isArray(defaultData)) {
-        defaultActions = defaultData;
-      }
-      const customData = this.dataManager.customData?.[category];
-      if (Array.isArray(customData)) {
-        customActions = customData;
-      }
-    }
+    const defaultActions = effectiveCategory
+      ? this.dataManager.getDefaultActions(effectiveCategory, subcategory)
+      : [];
+    const customActions = effectiveCategory
+      ? this.dataManager.getCustomActions(effectiveCategory, subcategory)
+      : [];
 
     if (defaultActions.length === 0 && customActions.length === 0) {
       this._setState({
@@ -210,7 +203,7 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
     if (defaultActions.length > 0) {
       // html_content += '<h5 class="grc-section-title">Default Actions</h5>';
       defaultActions.forEach((action, index) => {
-        const isModified = this.dataManager.isActionModified(category, subcategory, index);
+        const isModified = this.dataManager.isActionModified(effectiveCategory, subcategory, index);
         html_content += `
           <div class="grc-action-item ${isModified ? 'grc-action-modified' : ''}">
             <div class="grc-action-item-name">
@@ -332,7 +325,7 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
 
     if (!confirmed) return;
 
-    this.dataManager.deleteAction(category, subcategory, index, source);
+    await this.dataManager.deleteAction(category, subcategory, index, source);
     this.onSave(this.dataManager.customData);
     this.updateActionsList();
   }
