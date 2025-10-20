@@ -31,23 +31,31 @@ class ImportCustomActionsDialog extends FormApplication {
         const text = await file.text();
         const data = JSON.parse(text);
 
-        Dialog.confirm({
-          title: 'Import Actions Data',
+        const confirmed = await foundry.applications.api.DialogV2.confirm({
+          window: {
+            title: 'Import Actions Data',
+            icon: 'fa-solid fa-triangle-exclamation'
+          },
           content: '<p><strong>Warning:</strong> This will replace ALL current data with the imported data. Continue?</p>',
-          yes: async () => {
-            try {
-              await game.settings.set(MODULE_ID, FLAG_KEYS.DEFAULT_DATA, data.defaultData || {});
-              await game.settings.set(MODULE_ID, FLAG_KEYS.CUSTOM_DATA, data.customData || {});
-              await game.settings.set(MODULE_ID, FLAG_KEYS.MODIFIED_ACTIONS, data.modifiedActions || []);
-              await game.settings.set(MODULE_ID, FLAG_KEYS.DATA_VERSION, data.version || '');
-              ui.notifications.info('Actions data imported successfully. Please reload.');
-              setTimeout(() => window.location.reload(), 1000);
-            } catch (error) {
-              console.error('Error saving imported data:', error);
-              ui.notifications.error('Failed to save imported data');
-            }
-          }
+          modal: true,
+          rejectClose: false
         });
+
+        if (!confirmed) {
+          return;
+        }
+
+        try {
+          await game.settings.set(MODULE_ID, FLAG_KEYS.DEFAULT_DATA, data.defaultData || {});
+          await game.settings.set(MODULE_ID, FLAG_KEYS.CUSTOM_DATA, data.customData || {});
+          await game.settings.set(MODULE_ID, FLAG_KEYS.MODIFIED_ACTIONS, data.modifiedActions || []);
+          await game.settings.set(MODULE_ID, FLAG_KEYS.DATA_VERSION, data.version || '');
+          ui.notifications.info('Actions data imported successfully. Please reload.');
+          setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+          console.error('Error saving imported data:', error);
+          ui.notifications.error('Failed to save imported data');
+        }
       } catch (error) {
         console.error('Error importing file:', error);
         ui.notifications.error('Failed to import file. Please check the JSON format.');
@@ -224,18 +232,22 @@ Hooks.once('ready', () => {
  * Add button to scene controls (only visible to GMs)
  */
 Hooks.on('getSceneControlButtons', (controls) => {
-  const tokenControls = controls.tokens;
+  const tokenControls = controls.find((control) => control.name === 'token');
 
-  if (tokenControls && tokenControls.tools) {
-    tokenControls.tools['gurps-rules-companion'] = {
-      name: 'gurps-rules-companion',
-      title: 'GURPS Rules Companion',
-      icon: 'fa-solid fa-scale-balanced',
-      button: true,
-      onClick: () => ActionsManagerApp.show(),
-      visible: game.user.isGM && game.settings.get(MODULE_ID, 'showSceneButton')
-    };
-  }
+  if (!tokenControls) return;
+
+  const alreadyRegistered = tokenControls.tools?.some((tool) => tool.name === 'gurps-rules-companion');
+  if (alreadyRegistered) return;
+
+  tokenControls.tools = tokenControls.tools ?? [];
+  tokenControls.tools.push({
+    name: 'gurps-rules-companion',
+    title: 'GURPS Rules Companion',
+    icon: 'fa-solid fa-scale-balanced',
+    button: true,
+    onClick: () => ActionsManagerApp.show(),
+    visible: game.user.isGM && game.settings.get(MODULE_ID, 'showSceneButton')
+  });
 });
 
 /**
