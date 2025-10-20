@@ -16,7 +16,11 @@ export class AccordionManager {
   toggleColumn2(subcategory) {
     if (this.expandedColumn2.has(subcategory)) {
       this.expandedColumn2.delete(subcategory);
+      if (this.selectedColumn2 === subcategory) {
+        this.selectedColumn2 = null;
+      }
     } else {
+      this.expandedColumn2.clear();
       this.expandedColumn2.add(subcategory);
       this.selectedColumn2 = subcategory;
     }
