@@ -302,10 +302,104 @@
 }
 
 #grc-content-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin: 0;
   padding: 8px;
   border-left: 3px solid #666;
+}
+
+.grc-note-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  background-color: #ffffff12;
+  border-radius: 4px;
+}
+
+.grc-note-summary {
+  font-style: italic;
+  background-color: #ffffff24;
+}
+
+.grc-note-title {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grc-note-text {
   line-height: 1.5;
+}
+
+.grc-note-sections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grc-note-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #ffffff12;
+}
+
+.grc-note-section-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.grc-note-section-header input[type="text"] {
+  flex: 1;
+}
+
+.grc-note-section textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+#grc-add-note-section,
+.grc-remove-section {
+  padding: 6px 10px;
+  border: 2px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+#grc-add-note-section {
+  margin-top: 8px;
+  border-style: dashed;
+}
+
+#grc-add-note-section:hover {
+  border-color: #4a9eff;
+  color: #4a9eff;
+  border-style: solid;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
+}
+
+.grc-remove-section {
+  border-color: #ff4a4a;
+  color: #ff4a4a;
+  padding: 6px;
+}
+
+.grc-remove-section:hover {
+  background-color: rgba(255, 74, 74, 0.1);
+  box-shadow: 0 2px 6px rgba(255, 74, 74, 0.3);
 }
 
 #grc-content-footer {
@@ -375,7 +469,25 @@
   border-left: 3px solid #666;
   font-style: italic;
   opacity: 0.9;
-  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.grc-chat-notes strong {
+  font-style: normal;
+}
+
+.grc-chat-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.grc-chat-notes .grc-note-entry {
+  background-color: #ffffff12;
+  padding: 6px 8px;
+  border-radius: 4px;
 }
 
 .chat-message .grc-chat-message strong {

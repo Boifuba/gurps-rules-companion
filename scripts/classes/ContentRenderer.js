@@ -1,6 +1,68 @@
 import { ICON_URLS } from '../constants.js';
 
 /**
+ * Normalize a notes structure into a flat list of entries
+ * @param {string|Object|Array} notes - Raw notes data
+ * @returns {Array<{title: string, text: string, isSummary: boolean}>}
+ */
+export function normalizeNotesEntries(notes) {
+  const entries = [];
+
+  const addEntry = ({ title = '', text = '', isSummary = false } = {}) => {
+    const normalizedTitle = typeof title === 'string' ? title.trim() : '';
+    const normalizedText = typeof text === 'string' ? text.trim() : '';
+
+    if (!normalizedTitle && !normalizedText) return;
+    entries.push({
+      title: normalizedTitle,
+      text: normalizedText,
+      isSummary
+    });
+  };
+
+  const handleValue = (value, { summary = false } = {}) => {
+    if (value === null || value === undefined) return;
+
+    if (typeof value === 'string') {
+      addEntry({ text: value, isSummary: summary });
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        handleValue(item, { summary });
+      }
+      return;
+    }
+
+    if (typeof value === 'object') {
+      if (Object.prototype.hasOwnProperty.call(value, 'summary') || Array.isArray(value.sections)) {
+        handleValue(value.summary, { summary: true });
+        if (Array.isArray(value.sections)) {
+          for (const section of value.sections) {
+            if (typeof section === 'string') {
+              addEntry({ text: section });
+            } else if (section && typeof section === 'object') {
+              addEntry({ title: section.title, text: section.text });
+            }
+          }
+        }
+        return;
+      }
+
+      addEntry({
+        title: value.title,
+        text: value.text,
+        isSummary: value.isSummary === true || summary
+      });
+    }
+  };
+
+  handleValue(notes);
+  return entries;
+}
+
+/**
  * ContentRenderer - Handles rendering of action content details
  */
 export class ContentRenderer {
@@ -83,6 +145,34 @@ export class ContentRenderer {
   }
 
   /**
+   * Render notes into HTML entries
+   * @param {string|Object|Array} notes - Notes data
+   * @returns {string} HTML string for notes
+   */
+  renderNotes(notes) {
+    const entries = normalizeNotesEntries(notes);
+    if (!entries.length) return '';
+
+    const entriesHtml = entries
+      .map((entry) => {
+        const classes = ['grc-note-entry'];
+        if (entry.isSummary) classes.push('grc-note-summary');
+
+        const titleHtml = entry.title
+          ? `<div class="grc-note-title">${this.processPdfLinks(entry.title)}</div>`
+          : '';
+        const textHtml = entry.text
+          ? `<div class="grc-note-text">${this.processPdfLinks(entry.text)}</div>`
+          : '';
+
+        return `<div class="${classes.join(' ')}">${titleHtml}${textHtml}</div>`;
+      })
+      .join('');
+
+    return `<div id="grc-content-notes">${entriesHtml}</div>`;
+  }
+
+  /**
    * Setup click handlers for PDF links
    */
   setupPdfLinkHandlers() {
@@ -113,12 +203,15 @@ export class ContentRenderer {
             <span id="grc-content-value">${this.processPdfLinks(action.ref)}</span>
           </div>
           ` : ''}
-          ${action.notes ? `
+          ${(() => {
+            const notesHtml = this.renderNotes(action.notes);
+            return notesHtml ? `
           <div id="grc-content-field-notes">
             <span id="grc-content-label">Description:</span>
-            <p id="grc-content-notes">${this.processPdfLinks(action.notes)}</p>
+            ${notesHtml}
           </div>
-          ` : ''}
+          ` : '';
+          })()}
         </div>
         <div id="grc-content-footer">
           <button id="grc-send-chat-btn" type="button">
@@ -155,12 +248,15 @@ export class ContentRenderer {
             <span id="grc-content-value">${this.processPdfLinks(action.ref)}</span>
           </div>
           ` : ''}
-          ${action.notes ? `
+          ${(() => {
+            const notesHtml = this.renderNotes(action.notes);
+            return notesHtml ? `
           <div id="grc-content-field-notes">
             <span id="grc-content-label">Description:</span>
-            <p id="grc-content-notes">${this.processPdfLinks(action.notes)}</p>
+            ${notesHtml}
           </div>
-          ` : ''}
+          ` : '';
+          })()}
         </div>
         <div id="grc-content-footer">
           <button id="grc-send-chat-btn" type="button">
