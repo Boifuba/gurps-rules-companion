@@ -159,7 +159,7 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
     const actionsList = element.querySelector('#grc-actions-list');
     const addActionButton = element.querySelector('#grc-add-action-btn');
 
-    actionsList.addEventListener('click', (e) => {
+    actionsList.addEventListener('click', async (e) => {
       const target = e.target.closest('.grc-action-edit, .grc-action-delete');
       if (!target) return;
 
@@ -169,7 +169,7 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
       if (target.classList.contains('grc-action-edit')) {
         this.editAction(index, source);
       } else if (target.classList.contains('grc-action-delete')) {
-        this.deleteAction(index, source);
+        await this.deleteAction(index, source);
       }
     });
 
@@ -316,21 +316,25 @@ export class SettingsModal extends foundry.applications.api.HandlebarsApplicatio
     );
   }
 
-  deleteAction(index, source) {
+  async deleteAction(index, source) {
     const category = this._state.currentCategory;
     const subcategory = this._state.currentSubcategory;
 
-    Dialog.confirm({
-      title: 'Delete Action',
-      content: '<p>Are you sure you want to delete this action?</p>',
-      yes: () => {
-        this.dataManager.deleteAction(category, subcategory, index, source);
-        this.onSave(this.dataManager.customData);
-        this.updateActionsList();
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: {
+        title: 'Delete Action',
+        icon: 'fa-solid fa-triangle-exclamation'
       },
-      no: () => {},
-      defaultYes: false
+      content: '<p>Are you sure you want to delete this action?</p>',
+      modal: true,
+      rejectClose: false
     });
+
+    if (!confirmed) return;
+
+    this.dataManager.deleteAction(category, subcategory, index, source);
+    this.onSave(this.dataManager.customData);
+    this.updateActionsList();
   }
 
 
